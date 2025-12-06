@@ -99,7 +99,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p><del>当然是为了装杯啦!</del></p>
 <ul>
 <li>相对来说neovim的配置肯定是更加复杂的，但也更加客制化。</li>
-<li>体验新鲜感，为无聊的编写代码增加乐趣。</li>
+<li>体验新鲜感，为无聊的生活增加乐趣。</li>
 </ul>
 <h1>neovim的安装</h1>
 <p>想linux系统一样，neovim有很多“发行版”，比如lazyvim、astrovim等。<br>
@@ -120,7 +120,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 </li>
 </ul>
 <h2>🧰正式安装</h2>
-<p>Linux/Macos</p>
+<h3>Linux/Macos</h3>
 <ul>
 <li>备份你之前的配置（如果第一次配置就不需要做这一步）</li>
 </ul>
@@ -136,7 +136,24 @@ rm -rf <span class="pl-k">~</span>/.config/nvim/.git</pre></div>
 <ul>
 <li>astrovim，启动！</li>
 </ul>
-<div class="highlight highlight-source-shell"><pre class="notranslate">nvim</pre></div></div>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nvim</pre></div>
+<h3>Windows</h3>
+<ul>
+<li>备份你之前的配置（如果第一次配置就不需要做这一步）</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">Move-Item <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim.bak
+Move-Item <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim-data <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim-data.bak</pre></div>
+<ul>
+<li>安装astrovim</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">git clone --depth 1 https://github.com/AstroNvim/template <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim
+Remove-Item <span class="pl-smi">$env</span>:LOCALAPPDATA<span class="pl-cce">\n</span>vim<span class="pl-cce">\.</span>git -Recurse -Force</pre></div>
+<ul>
+<li>astrovim，启动！</li>
+</ul>
+<div class="highlight highlight-source-shell"><pre class="notranslate">nvim</pre></div>
+<h1>结语</h1>
+<p>以上就是neovim的配置安装，之后我会记录如何使用neovim进行日常的开发，谢谢观看！</p></div>
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 <button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>

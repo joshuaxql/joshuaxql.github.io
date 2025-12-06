@@ -4,7 +4,7 @@
 # 为什么选择neovim
 ~~当然是为了装杯啦!~~
 - 相对来说neovim的配置肯定是更加复杂的，但也更加客制化。
-- 体验新鲜感，为无聊的编写代码增加乐趣。
+- 体验新鲜感，为无聊的生活增加乐趣。
 
 # neovim的安装
 想linux系统一样，neovim有很多“发行版”，比如lazyvim、astrovim等。
@@ -22,7 +22,7 @@
     - Node - Node is needed for a lot of the LSPs, and for the node repl toggle terminal (<Leader>tn)
 
 ## 🧰正式安装
-Linux/Macos
+### Linux/Macos
 - 备份你之前的配置（如果第一次配置就不需要做这一步）
 ```shell
 mv ~/.config/nvim ~/.config/nvim.bak
@@ -40,3 +40,21 @@ rm -rf ~/.config/nvim/.git
 nvim
 ```
 
+### Windows
+- 备份你之前的配置（如果第一次配置就不需要做这一步）
+```shell
+Move-Item $env:LOCALAPPDATA\nvim $env:LOCALAPPDATA\nvim.bak
+Move-Item $env:LOCALAPPDATA\nvim-data $env:LOCALAPPDATA\nvim-data.bak
+```
+- 安装astrovim
+```shell
+git clone --depth 1 https://github.com/AstroNvim/template $env:LOCALAPPDATA\nvim
+Remove-Item $env:LOCALAPPDATA\nvim\.git -Recurse -Force
+```
+- astrovim，启动！
+```shell
+nvim
+```
+
+# 结语
+以上就是neovim的配置安装，之后我会记录如何使用neovim进行日常的开发，谢谢观看！
