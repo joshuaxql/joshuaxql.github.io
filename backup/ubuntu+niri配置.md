@@ -62,11 +62,13 @@ input {
         numlock
     }
     touchpad {
+        tap
     }
     mouse {
     }
     trackpoint {
     }
+    focus-follows-mouse max-scroll-amount="10%"
 }
 // You can configure outputs by their name, which you can find
 // by running `niri msg outputs` while inside a niri instance.
@@ -75,7 +77,7 @@ input {
 // https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
 // Remember to uncomment the node by removing "/-"!
 /-output "eDP-2" {
-    mode "2560x1600@60"
+    mode "2560x1600@60.002"
     position x=2560 y=0
     variable-refresh-rate
 }
@@ -154,6 +156,8 @@ environment {
   LC_MESSAGES "zh_CN.UTF-8"
   GTK_IM_MODULE "fcitx"
   XMODIFIERS "@im=fcitx"
+  QT_QPA_PLATFORMTHEME "gtk3"
+  QT_QPA_PLATFORMTHEME_QT6 "gtk3"
   QT_IM_MODULE "fcitx"
 }
 spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &"
@@ -163,6 +167,12 @@ hotkey-overlay {
 }
 prefer-no-csd
 screenshot-path "~/图片/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+cursor {
+    xcursor-theme "Bibata"
+    xcursor-size 30
+    hide-when-typing
+    hide-after-inactive-ms 1000
+}
 animations {
     workspace-switch {
         spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
@@ -347,8 +357,11 @@ cursor_trail 3
 一款可以平替office的办公软件。
 
 ## 一些已知问题的解决方案
-* snap安装的应用无法使用输入法，应为其应用了沙盒化。解决方案为用apt安装。
+* snap安装的应用(firefox)可能无法使用输入法，因为snap应用了沙盒化。解决方案为用apt安装。
 * lxmusic启动时没有自动分配大小。解决方案为设置为全屏启动。
+
+## 一些疑难杂症
+* 微信、QQ的输入法选择框很小(我没有找到解决方法，如果你有请赐教！🤓)
 
 # 结语
 最后用fastfetch一下，交一下你的作业吧！😄

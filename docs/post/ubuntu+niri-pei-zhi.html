@@ -151,11 +151,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
         <span class="pl-smi">numlock</span>
     }
     <span class="pl-s1">touchpad</span> {
+        <span class="pl-smi">tap</span>
     }
     <span class="pl-s1">mouse</span> {
     }
-    <span class="pl-s1">trackpoint</span> {
+    <span class="pl-smi">trackpoint</span> {
     }
+    <span class="pl-s1">focus</span><span class="pl-c1">-</span><span class="pl-s1">follows</span><span class="pl-c1">-</span><span class="pl-s1">mouse</span> <span class="pl-s1">max</span><span class="pl-c1">-</span><span class="pl-s1">scroll</span><span class="pl-c1">-</span><span class="pl-s1">amount</span><span class="pl-c1">=</span><span class="pl-s">"10%"</span>
 }
 <span class="pl-c">// You can configure outputs by their name, which you can find</span>
 <span class="pl-c">// by running `niri msg outputs` while inside a niri instance.</span>
@@ -164,14 +166,14 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs</span>
 <span class="pl-c">// Remember to uncomment the node by removing "/-"!</span>
 /<span class="pl-c1">-</span><span class="pl-s1">output</span> <span class="pl-s">"eDP-2"</span> {
-    <span class="pl-s1">mode</span> <span class="pl-s">"2560x1600@60"</span>
+    <span class="pl-s1">mode</span> <span class="pl-s">"2560x1600@60.002"</span>
     <span class="pl-s1">position</span> <span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-c1">2560</span> <span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">0</span>
     <span class="pl-s1">variable</span><span class="pl-c1">-</span><span class="pl-s1">refresh</span><span class="pl-c1">-</span><span class="pl-s1">rate</span>
 }
 <span class="pl-c">// Settings that influence how windows are positioned and sized.</span>
 <span class="pl-c">// Find more information on the wiki:</span>
 <span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout</span>
-<span class="pl-s1">layout</span> {
+<span class="pl-smi">layout</span> {
     <span class="pl-c">// Set gaps around windows in logical pixels.</span>
     <span class="pl-s1">background</span><span class="pl-c1">-</span><span class="pl-s1">color</span> <span class="pl-s">"transparent"</span>
     <span class="pl-c">// When to center a column when changing focus, options are:</span>
@@ -238,11 +240,13 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <span class="pl-c">// which may be more convenient to use.</span>
 <span class="pl-c">// See the binds section below for more spawn examples.</span>
 <span class="pl-c">// This line starts waybar, a commonly used bar for Wayland compositors.</span>
-<span class="pl-s1">environment</span> {
+<span class="pl-smi">environment</span> {
   <span class="pl-c1">XDG_CURRENT_DESKTOP</span> <span class="pl-s">"niri"</span>
   <span class="pl-c1">LC_MESSAGES</span> <span class="pl-s">"zh_CN.UTF-8"</span>
   <span class="pl-c1">GTK_IM_MODULE</span> <span class="pl-s">"fcitx"</span>
   <span class="pl-c1">XMODIFIERS</span> <span class="pl-s">"@im=fcitx"</span>
+  <span class="pl-c1">QT_QPA_PLATFORMTHEME</span> <span class="pl-s">"gtk3"</span>
+  <span class="pl-c1">QT_QPA_PLATFORMTHEME_QT6</span> <span class="pl-s">"gtk3"</span>
   <span class="pl-c1">QT_IM_MODULE</span> <span class="pl-s">"fcitx"</span>
 }
 <span class="pl-s1">spawn</span><span class="pl-c1">-</span><span class="pl-s1">at</span><span class="pl-c1">-</span><span class="pl-s1">startup</span> <span class="pl-s">"bash"</span> <span class="pl-s">"-c"</span> <span class="pl-s">"wl-paste --watch cliphist store &amp;"</span>
@@ -252,6 +256,12 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 }
 <span class="pl-s1">prefer</span><span class="pl-c1">-</span><span class="pl-s1">no</span><span class="pl-c1">-</span><span class="pl-s1">csd</span>
 <span class="pl-s1">screenshot</span><span class="pl-c1">-</span><span class="pl-s1">path</span> <span class="pl-s">"~/图片/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"</span>
+<span class="pl-s1">cursor</span> {
+    <span class="pl-s1">xcursor</span><span class="pl-c1">-</span><span class="pl-s1">theme</span> <span class="pl-s">"Bibata"</span>
+    <span class="pl-s1">xcursor</span><span class="pl-c1">-</span><span class="pl-s1">size</span> <span class="pl-c1">30</span>
+    <span class="pl-s1">hide</span><span class="pl-c1">-</span><span class="pl-s1">when</span><span class="pl-c1">-</span><span class="pl-s1">typing</span>
+    <span class="pl-s1">hide</span><span class="pl-c1">-</span><span class="pl-s1">after</span><span class="pl-c1">-</span><span class="pl-s1">inactive</span><span class="pl-c1">-</span><span class="pl-s1">ms</span> <span class="pl-c1">1000</span>
+}
 <span class="pl-s1">animations</span> {
     <span class="pl-s1">workspace</span><span class="pl-c1">-</span><span class="pl-s1">switch</span> {
         <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.80</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">523</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
@@ -433,8 +443,12 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>一款可以平替office的办公软件。</p>
 <h2>一些已知问题的解决方案</h2>
 <ul>
-<li>snap安装的应用无法使用输入法，应为其应用了沙盒化。解决方案为用apt安装。</li>
+<li>snap安装的应用(firefox)可能无法使用输入法，因为snap应用了沙盒化。解决方案为用apt安装。</li>
 <li>lxmusic启动时没有自动分配大小。解决方案为设置为全屏启动。</li>
+</ul>
+<h2>一些疑难杂症</h2>
+<ul>
+<li>微信、QQ的输入法选择框很小(我没有找到解决方法，如果你有请赐教！🤓)</li>
 </ul>
 <h1>结语</h1>
 <p>最后用fastfetch一下，交一下你的作业吧！😄</p></div>
