@@ -19,7 +19,7 @@
 <meta property="og:url" content="https://joshuaxql.github.io/post/ubuntu%2Bniri-pei-zhi.html">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/200189949?v=4">
 <title>ubuntu+niri配置</title>
-
+<link href="//unpkg.com/@wooorm/starry-night@2.1.1/style/both.css" rel="stylesheet" />
 
 
 </head>
@@ -43,7 +43,17 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     body {padding: 8px;}
     .postTitle{font-size:24px;}
 }
-
+.copy-feedback {
+    display: none;
+    position: absolute;
+    top: 10px;
+    right: 50px;
+    color: var(--color-fg-on-emphasis);
+    background-color: var(--color-fg-muted);
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 12px;
+}
 </style>
 
 
@@ -108,8 +118,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <ul>
 <li>自动脚本安装</li>
 </ul>
-<pre lang="bash" class="notranslate"><code class="notranslate">curl -fsSL https://install.danklinux.com | sh
-</code></pre>
+<div class="highlight highlight-source-shell"><pre class="notranslate">curl -fsSL https://install.danklinux.com <span class="pl-k">|</span> sh</pre></div>
 <ul>
 <li>
 <p>期间选择niri作为桌面，kitty作为终端</p>
@@ -118,306 +127,304 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <p>配置niri，配置文件在~/.config/niri/config.kdl</p>
 </li>
 </ul>
-<pre lang="C" class="notranslate"><code class="notranslate">// This config is in the KDL format: https://kdl.dev
-// "/-" comments out the following node.
-// Check the wiki for a full description of the configuration:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction
-config-notification {
-    disable-failed
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-c">// This config is in the KDL format: https://kdl.dev</span>
+<span class="pl-c">// "/-" comments out the following node.</span>
+<span class="pl-c">// Check the wiki for a full description of the configuration:</span>
+<span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Introduction</span>
+<span class="pl-s1">config</span><span class="pl-c1">-</span><span class="pl-s1">notification</span> {
+    <span class="pl-s1">disable</span><span class="pl-c1">-</span><span class="pl-s1">failed</span>
 }
 
-gestures {
-    hot-corners {
-        off
+<span class="pl-s1">gestures</span> {
+    <span class="pl-s1">hot</span><span class="pl-c1">-</span><span class="pl-s1">corners</span> {
+        <span class="pl-s1">off</span>
     }
 }
 
-// Input device configuration.
-// Find the full list of options on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Input
-input {
-    keyboard {
-        xkb {
+<span class="pl-c">// Input device configuration.</span>
+<span class="pl-c">// Find the full list of options on the wiki:</span>
+<span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Input</span>
+<span class="pl-smi">input</span> {
+    <span class="pl-s1">keyboard</span> {
+        <span class="pl-s1">xkb</span> {
         }
-        numlock
+        <span class="pl-smi">numlock</span>
     }
-    touchpad {
-        tap
+    <span class="pl-s1">touchpad</span> {
+        <span class="pl-smi">tap</span>
     }
-    mouse {
+    <span class="pl-s1">mouse</span> {
     }
-    trackpoint {
+    <span class="pl-smi">trackpoint</span> {
     }
-    focus-follows-mouse max-scroll-amount="10%"
+    <span class="pl-s1">focus</span><span class="pl-c1">-</span><span class="pl-s1">follows</span><span class="pl-c1">-</span><span class="pl-s1">mouse</span> <span class="pl-s1">max</span><span class="pl-c1">-</span><span class="pl-s1">scroll</span><span class="pl-c1">-</span><span class="pl-s1">amount</span><span class="pl-c1">=</span><span class="pl-s">"10%"</span>
 }
-// You can configure outputs by their name, which you can find
-// by running `niri msg outputs` while inside a niri instance.
-// The built-in laptop monitor is usually called "eDP-1".
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs
-// Remember to uncomment the node by removing "/-"!
-/-output "eDP-2" {
-    mode "2560x1600@60.002"
-    position x=2560 y=0
-    variable-refresh-rate
+<span class="pl-c">// You can configure outputs by their name, which you can find</span>
+<span class="pl-c">// by running `niri msg outputs` while inside a niri instance.</span>
+<span class="pl-c">// The built-in laptop monitor is usually called "eDP-1".</span>
+<span class="pl-c">// Find more information on the wiki:</span>
+<span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Outputs</span>
+<span class="pl-c">// Remember to uncomment the node by removing "/-"!</span>
+/<span class="pl-c1">-</span><span class="pl-s1">output</span> <span class="pl-s">"eDP-2"</span> {
+    <span class="pl-s1">mode</span> <span class="pl-s">"2560x1600@60.002"</span>
+    <span class="pl-s1">position</span> <span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-c1">2560</span> <span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">0</span>
+    <span class="pl-s1">variable</span><span class="pl-c1">-</span><span class="pl-s1">refresh</span><span class="pl-c1">-</span><span class="pl-s1">rate</span>
 }
-// Settings that influence how windows are positioned and sized.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout
-layout {
-    // Set gaps around windows in logical pixels.
-    background-color "transparent"
-    // When to center a column when changing focus, options are:
-    // - "never", default behavior, focusing an off-screen column will keep at the left
-    //   or right edge of the screen.
-    // - "always", the focused column will always be centered.
-    // - "on-overflow", focusing a column will center it if it doesn't fit
-    //   together with the previously focused column.
-    center-focused-column "never"
-    // You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.
-    preset-column-widths {
-        // Proportion sets the width as a fraction of the output width, taking gaps into account.
-        // For example, you can perfectly fit four windows sized "proportion 0.25" on an output.
-        // The default preset widths are 1/3, 1/2 and 2/3 of the output.
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-        // Fixed sets the width in logical pixels exactly.
-        // fixed 1920
+<span class="pl-c">// Settings that influence how windows are positioned and sized.</span>
+<span class="pl-c">// Find more information on the wiki:</span>
+<span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Layout</span>
+<span class="pl-smi">layout</span> {
+    <span class="pl-c">// Set gaps around windows in logical pixels.</span>
+    <span class="pl-s1">background</span><span class="pl-c1">-</span><span class="pl-s1">color</span> <span class="pl-s">"transparent"</span>
+    <span class="pl-c">// When to center a column when changing focus, options are:</span>
+    <span class="pl-c">// - "never", default behavior, focusing an off-screen column will keep at the left</span>
+    <span class="pl-c">//   or right edge of the screen.</span>
+    <span class="pl-c">// - "always", the focused column will always be centered.</span>
+    <span class="pl-c">// - "on-overflow", focusing a column will center it if it doesn't fit</span>
+    <span class="pl-c">//   together with the previously focused column.</span>
+    <span class="pl-s1">center</span><span class="pl-c1">-</span><span class="pl-s1">focused</span><span class="pl-c1">-</span><span class="pl-s1">column</span> <span class="pl-s">"never"</span>
+    <span class="pl-c">// You can customize the widths that "switch-preset-column-width" (Mod+R) toggles between.</span>
+    <span class="pl-s1">preset</span><span class="pl-c1">-</span><span class="pl-s1">column</span><span class="pl-c1">-</span><span class="pl-s1">widths</span> {
+        <span class="pl-c">// Proportion sets the width as a fraction of the output width, taking gaps into account.</span>
+        <span class="pl-c">// For example, you can perfectly fit four windows sized "proportion 0.25" on an output.</span>
+        <span class="pl-c">// The default preset widths are 1/3, 1/2 and 2/3 of the output.</span>
+        <span class="pl-smi">proportion</span> <span class="pl-c1">0.33333</span>
+        <span class="pl-s1">proportion</span> <span class="pl-c1">0.5</span>
+        <span class="pl-s1">proportion</span> <span class="pl-c1">0.66667</span>
+        <span class="pl-c">// Fixed sets the width in logical pixels exactly.</span>
+        <span class="pl-c">// fixed 1920</span>
     }
-    // You can also customize the heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.
-    // preset-window-heights { }
-    // You can change the default width of the new windows.
-    default-column-width { proportion 0.5; }
-    // If you leave the brackets empty, the windows themselves will decide their initial width.
-    // default-column-width {}
-    // By default focus ring and border are rendered as a solid background rectangle
-    // behind windows. That is, they will show up through semitransparent windows.
-    // This is because windows using client-side decorations can have an arbitrary shape.
-    //
-    // If you don't like that, you should uncomment `prefer-no-csd` below.
-    // Niri will draw focus ring and border *around* windows that agree to omit their
-    // client-side decorations.
-    //
-    // Alternatively, you can override it with a window rule called
-    // `draw-border-with-background`.
-    border {
-        off
-        width 4
-        active-color   "#707070"      // Neutral gray
-        inactive-color "#d0d0d0"      // Light gray
-        urgent-color   "#cc4444"      // Softer red
+    <span class="pl-c">// You can also customize the heights that "switch-preset-window-height" (Mod+Shift+R) toggles between.</span>
+    <span class="pl-c">// preset-window-heights { }</span>
+    <span class="pl-c">// You can change the default width of the new windows.</span>
+    <span class="pl-k">default</span><span class="pl-c1">-</span><span class="pl-s1">column</span><span class="pl-c1">-</span><span class="pl-s1">width</span> { <span class="pl-smi">proportion</span> <span class="pl-c1">0.5</span>; }
+    <span class="pl-c">// If you leave the brackets empty, the windows themselves will decide their initial width.</span>
+    <span class="pl-c">// default-column-width {}</span>
+    <span class="pl-c">// By default focus ring and border are rendered as a solid background rectangle</span>
+    <span class="pl-c">// behind windows. That is, they will show up through semitransparent windows.</span>
+    <span class="pl-c">// This is because windows using client-side decorations can have an arbitrary shape.</span>
+    <span class="pl-c">//</span>
+    <span class="pl-c">// If you don't like that, you should uncomment `prefer-no-csd` below.</span>
+    <span class="pl-c">// Niri will draw focus ring and border *around* windows that agree to omit their</span>
+    <span class="pl-c">// client-side decorations.</span>
+    <span class="pl-c">//</span>
+    <span class="pl-c">// Alternatively, you can override it with a window rule called</span>
+    <span class="pl-c">// `draw-border-with-background`.</span>
+    <span class="pl-smi">border</span> {
+        <span class="pl-smi">off</span>
+        <span class="pl-s1">width</span> <span class="pl-c1">4</span>
+        <span class="pl-s1">active</span><span class="pl-c1">-</span><span class="pl-s1">color</span>   <span class="pl-s">"#707070"</span>      <span class="pl-c">// Neutral gray</span>
+        <span class="pl-s1">inactive</span><span class="pl-c1">-</span><span class="pl-s1">color</span> <span class="pl-s">"#d0d0d0"</span>      <span class="pl-c">// Light gray</span>
+        <span class="pl-s1">urgent</span><span class="pl-c1">-</span><span class="pl-s1">color</span>   <span class="pl-s">"#cc4444"</span>      <span class="pl-c">// Softer red</span>
     }
-    shadow {
-        softness 30
-        spread 5
-        offset x=0 y=5
-        color "#0007"
+    <span class="pl-smi">shadow</span> {
+        <span class="pl-s1">softness</span> <span class="pl-c1">30</span>
+        <span class="pl-s1">spread</span> <span class="pl-c1">5</span>
+        <span class="pl-s1">offset</span> <span class="pl-s1">x</span><span class="pl-c1">=</span><span class="pl-c1">0</span> <span class="pl-s1">y</span><span class="pl-c1">=</span><span class="pl-c1">5</span>
+        <span class="pl-s1">color</span> <span class="pl-s">"#0007"</span>
     }
-    struts {
-    }
-}
-layer-rule {
-    match namespace="^quickshell$"
-    place-within-backdrop true
-}
-overview {
-    workspace-shadow {
-        off
+    <span class="pl-s1">struts</span> {
     }
 }
-// Add lines like this to spawn processes at startup.
-// Note that running niri as a session supports xdg-desktop-autostart,
-// which may be more convenient to use.
-// See the binds section below for more spawn examples.
-// This line starts waybar, a commonly used bar for Wayland compositors.
-environment {
-  XDG_CURRENT_DESKTOP "niri"
-  LC_MESSAGES "zh_CN.UTF-8"
-  GTK_IM_MODULE "fcitx"
-  XMODIFIERS "@im=fcitx"
-  QT_QPA_PLATFORMTHEME "gtk3"
-  QT_QPA_PLATFORMTHEME_QT6 "gtk3"
-  QT_IM_MODULE "fcitx"
+<span class="pl-s1">layer</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-smi">match</span> <span class="pl-s1">namespace</span><span class="pl-c1">=</span><span class="pl-s">"^quickshell$"</span>
+    <span class="pl-s1">place</span><span class="pl-c1">-</span><span class="pl-s1">within</span><span class="pl-c1">-</span><span class="pl-s1">backdrop</span> <span class="pl-s1">true</span>
 }
-spawn-at-startup "bash" "-c" "wl-paste --watch cliphist store &amp;"
-spawn-at-startup "fcitx5"
-hotkey-overlay {
-    skip-at-startup
-}
-prefer-no-csd
-screenshot-path "~/图片/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
-cursor {
-    xcursor-theme "Bibata"
-    xcursor-size 30
-    hide-when-typing
-    hide-after-inactive-ms 1000
-}
-animations {
-    workspace-switch {
-        spring damping-ratio=0.80 stiffness=523 epsilon=0.0001
-    }
-    window-open {
-        duration-ms 150
-        curve "ease-out-expo"
-    }
-    window-close {
-        duration-ms 150
-        curve "ease-out-quad"
-    }
-    horizontal-view-movement {
-        spring damping-ratio=0.85 stiffness=423 epsilon=0.0001
-    }
-    window-movement {
-        spring damping-ratio=0.75 stiffness=323 epsilon=0.0001
-    }
-    window-resize {
-        spring damping-ratio=0.85 stiffness=423 epsilon=0.0001
-    }
-    config-notification-open-close {
-        spring damping-ratio=0.65 stiffness=923 epsilon=0.001
-    }
-    screenshot-ui-open {
-        duration-ms 200
-        curve "ease-out-quad"
-    }
-    overview-open-close {
-        spring damping-ratio=0.85 stiffness=800 epsilon=0.0001
+<span class="pl-s1">overview</span> {
+    <span class="pl-s1">workspace</span><span class="pl-c1">-</span><span class="pl-s1">shadow</span> {
+        <span class="pl-s1">off</span>
     }
 }
-// Window rules let you adjust behavior for individual windows.
-// Find more information on the wiki:
-// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules
-// Work around WezTerm's initial configure bug
-// by setting an empty default-column-width.
-window-rule {
-    // This regular expression is intentionally made as specific as possible,
-    // since this is the default config, and we want no false positives.
-    // You can get away with just app-id="wezterm" if you want.
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    default-column-width {}
+<span class="pl-c">// Add lines like this to spawn processes at startup.</span>
+<span class="pl-c">// Note that running niri as a session supports xdg-desktop-autostart,</span>
+<span class="pl-c">// which may be more convenient to use.</span>
+<span class="pl-c">// See the binds section below for more spawn examples.</span>
+<span class="pl-c">// This line starts waybar, a commonly used bar for Wayland compositors.</span>
+<span class="pl-smi">environment</span> {
+  <span class="pl-c1">XDG_CURRENT_DESKTOP</span> <span class="pl-s">"niri"</span>
+  <span class="pl-c1">LC_MESSAGES</span> <span class="pl-s">"zh_CN.UTF-8"</span>
+  <span class="pl-c1">GTK_IM_MODULE</span> <span class="pl-s">"fcitx"</span>
+  <span class="pl-c1">XMODIFIERS</span> <span class="pl-s">"@im=fcitx"</span>
+  <span class="pl-c1">QT_QPA_PLATFORMTHEME</span> <span class="pl-s">"gtk3"</span>
+  <span class="pl-c1">QT_QPA_PLATFORMTHEME_QT6</span> <span class="pl-s">"gtk3"</span>
+  <span class="pl-c1">QT_IM_MODULE</span> <span class="pl-s">"fcitx"</span>
 }
-window-rule {
-    match app-id=r#"^org\.gnome\."#
-    draw-border-with-background false
-    geometry-corner-radius 12
-    clip-to-geometry true
+<span class="pl-s1">spawn</span><span class="pl-c1">-</span><span class="pl-s1">at</span><span class="pl-c1">-</span><span class="pl-s1">startup</span> <span class="pl-s">"bash"</span> <span class="pl-s">"-c"</span> <span class="pl-s">"wl-paste --watch cliphist store &amp;"</span>
+<span class="pl-s1">spawn</span><span class="pl-c1">-</span><span class="pl-s1">at</span><span class="pl-c1">-</span><span class="pl-s1">startup</span> <span class="pl-s">"fcitx5"</span>
+<span class="pl-s1">hotkey</span><span class="pl-c1">-</span><span class="pl-s1">overlay</span> {
+    <span class="pl-s1">skip</span><span class="pl-c1">-</span><span class="pl-s1">at</span><span class="pl-c1">-</span><span class="pl-s1">startup</span>
 }
-window-rule {
-    match app-id=r#"^gnome-control-center$"#
-    match app-id=r#"^pavucontrol$"#
-    match app-id=r#"^nm-connection-editor$"#
-    default-column-width { proportion 0.5; }
-    open-floating false
+<span class="pl-s1">prefer</span><span class="pl-c1">-</span><span class="pl-s1">no</span><span class="pl-c1">-</span><span class="pl-s1">csd</span>
+<span class="pl-s1">screenshot</span><span class="pl-c1">-</span><span class="pl-s1">path</span> <span class="pl-s">"~/图片/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"</span>
+<span class="pl-s1">cursor</span> {
+    <span class="pl-s1">xcursor</span><span class="pl-c1">-</span><span class="pl-s1">theme</span> <span class="pl-s">"Bibata"</span>
+    <span class="pl-s1">xcursor</span><span class="pl-c1">-</span><span class="pl-s1">size</span> <span class="pl-c1">30</span>
+    <span class="pl-s1">hide</span><span class="pl-c1">-</span><span class="pl-s1">when</span><span class="pl-c1">-</span><span class="pl-s1">typing</span>
+    <span class="pl-s1">hide</span><span class="pl-c1">-</span><span class="pl-s1">after</span><span class="pl-c1">-</span><span class="pl-s1">inactive</span><span class="pl-c1">-</span><span class="pl-s1">ms</span> <span class="pl-c1">1000</span>
 }
-window-rule {
-    match app-id=r#"^gnome-calculator$"#
-    match app-id=r#"^galculator$"#
-    match app-id=r#"^blueman-manager$"#
-    match app-id=r#"^org\.gnome\.Nautilus$"#
-    match app-id=r#"^steam$"#
-    match app-id=r#"^xdg-desktop-portal$"#
-    open-floating true
-}
-window-rule {
-    match app-id=r#"^org\.wezfurlong\.wezterm$"#
-    match app-id="Alacritty"
-    match app-id="zen"
-    match app-id="com.mitchellh.ghostty"
-    match app-id="kitty"
-    draw-border-with-background false
-}
-window-rule {
-    //geometry-corner-radius 12
-    //clip-to-geometry true
-    match is-active=false
-    open-fullscreen false
-    opacity 0.9
-    open-floating false
-}
-window-rule {
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
-    match app-id="zoom"
-    open-floating true
-}
-// Open dms windows as floating by default
-window-rule {
-    match app-id=r#"org.quickshell$"#
-    open-floating true
-}
-debug {
-    honor-xdg-activation-with-invalid-serial
-}
-
-// Override to disable super+tab
-recent-windows {
-    binds {
-        Alt+Tab         { next-window scope="output"; }
-        Alt+Shift+Tab   { previous-window scope="output"; }
-        Alt+grave       { next-window filter="app-id"; }
-        Alt+Shift+grave { previous-window filter="app-id"; }
+<span class="pl-s1">animations</span> {
+    <span class="pl-s1">workspace</span><span class="pl-c1">-</span><span class="pl-s1">switch</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.80</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">523</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
     }
+    <span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">open</span> {
+        <span class="pl-s1">duration</span><span class="pl-c1">-</span><span class="pl-s1">ms</span> <span class="pl-c1">150</span>
+        <span class="pl-s1">curve</span> <span class="pl-s">"ease-out-expo"</span>
+    }
+    <span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">close</span> {
+        <span class="pl-s1">duration</span><span class="pl-c1">-</span><span class="pl-s1">ms</span> <span class="pl-c1">150</span>
+        <span class="pl-s1">curve</span> <span class="pl-s">"ease-out-quad"</span>
+    }
+    <span class="pl-s1">horizontal</span><span class="pl-c1">-</span><span class="pl-s1">view</span><span class="pl-c1">-</span><span class="pl-s1">movement</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.85</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">423</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
+    }
+    <span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">movement</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.75</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">323</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
+    }
+    <span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">resize</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.85</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">423</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
+    }
+    <span class="pl-s1">config</span><span class="pl-c1">-</span><span class="pl-s1">notification</span><span class="pl-c1">-</span><span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">close</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.65</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">923</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.001</span>
+    }
+    <span class="pl-s1">screenshot</span><span class="pl-c1">-</span><span class="pl-s1">ui</span><span class="pl-c1">-</span><span class="pl-s1">open</span> {
+        <span class="pl-s1">duration</span><span class="pl-c1">-</span><span class="pl-s1">ms</span> <span class="pl-c1">200</span>
+        <span class="pl-s1">curve</span> <span class="pl-s">"ease-out-quad"</span>
+    }
+    <span class="pl-s1">overview</span><span class="pl-c1">-</span><span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">close</span> {
+        <span class="pl-smi">spring</span> <span class="pl-s1">damping</span><span class="pl-c1">-</span><span class="pl-s1">ratio</span><span class="pl-c1">=</span><span class="pl-c1">0.85</span> <span class="pl-s1">stiffness</span><span class="pl-c1">=</span><span class="pl-c1">800</span> <span class="pl-s1">epsilon</span><span class="pl-c1">=</span><span class="pl-c1">0.0001</span>
+    }
+}
+<span class="pl-c">// Window rules let you adjust behavior for individual windows.</span>
+<span class="pl-c">// Find more information on the wiki:</span>
+<span class="pl-c">// https://github.com/YaLTeR/niri/wiki/Configuration:-Window-Rules</span>
+<span class="pl-c">// Work around WezTerm's initial configure bug</span>
+<span class="pl-c">// by setting an empty default-column-width.</span>
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-c">// This regular expression is intentionally made as specific as possible,</span>
+    <span class="pl-c">// since this is the default config, and we want no false positives.</span>
+    <span class="pl-c">// You can get away with just app-id="wezterm" if you want.</span>
+    <span class="pl-smi">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^org\.wezfurlong\.wezterm$"</span>#
+    <span class="pl-k">default</span><span class="pl-c1">-</span><span class="pl-s1">column</span><span class="pl-c1">-</span><span class="pl-s1">width</span> {}
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-smi">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^org\.gnome\."</span>#
+    <span class="pl-s1">draw</span><span class="pl-c1">-</span><span class="pl-s1">border</span><span class="pl-c1">-</span><span class="pl-s1">with</span><span class="pl-c1">-</span><span class="pl-s1">background</span> <span class="pl-s1">false</span>
+    <span class="pl-s1">geometry</span><span class="pl-c1">-</span><span class="pl-s1">corner</span><span class="pl-c1">-</span><span class="pl-s1">radius</span> <span class="pl-c1">12</span>
+    <span class="pl-s1">clip</span><span class="pl-c1">-</span><span class="pl-s1">to</span><span class="pl-c1">-</span><span class="pl-s1">geometry</span> <span class="pl-s1">true</span>
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-smi">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^gnome-control-center$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^pavucontrol$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^nm-connection-editor$"</span>#
+    <span class="pl-k">default</span><span class="pl-c1">-</span><span class="pl-s1">column</span><span class="pl-c1">-</span><span class="pl-s1">width</span> { <span class="pl-s1">proportion</span> <span class="pl-c1">0.5</span>; }
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">floating</span> <span class="pl-s1">false</span>
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-smi">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^gnome-calculator$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^galculator$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^blueman-manager$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^org\.gnome\.Nautilus$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^steam$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^xdg-desktop-portal$"</span>#
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">floating</span> <span class="pl-s1">true</span>
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"^org\.wezfurlong\.wezterm$"</span>#
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s">"Alacritty"</span>
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s">"zen"</span>
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s">"com.mitchellh.ghostty"</span>
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s">"kitty"</span>
+    <span class="pl-s1">draw</span><span class="pl-c1">-</span><span class="pl-s1">border</span><span class="pl-c1">-</span><span class="pl-s1">with</span><span class="pl-c1">-</span><span class="pl-s1">background</span> <span class="pl-s1">false</span>
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-c">//geometry-corner-radius 12</span>
+    <span class="pl-c">//clip-to-geometry true</span>
+    <span class="pl-s1">match</span> <span class="pl-s1">is</span><span class="pl-c1">-</span><span class="pl-s1">active</span><span class="pl-c1">=</span>false
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">fullscreen</span> <span class="pl-s1">false</span>
+    <span class="pl-s1">opacity</span> <span class="pl-c1">0.9</span>
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">floating</span> <span class="pl-s1">false</span>
+}
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"firefox$"</span><span class="pl-k"># title</span><span class="pl-c1">=</span><span class="pl-s">"^Picture-in-Picture$"</span>
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s">"zoom"</span>
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">floating</span> <span class="pl-s1">true</span>
+}
+<span class="pl-c">// Open dms windows as floating by default</span>
+<span class="pl-s1">window</span><span class="pl-c1">-</span><span class="pl-s1">rule</span> {
+    <span class="pl-s1">match</span> <span class="pl-s1">app</span><span class="pl-c1">-</span><span class="pl-s1">id</span><span class="pl-c1">=</span><span class="pl-s1">r</span>#<span class="pl-s">"org.quickshell$"</span>#
+    <span class="pl-s1">open</span><span class="pl-c1">-</span><span class="pl-s1">floating</span> <span class="pl-s1">true</span>
+}
+<span class="pl-s1">debug</span> {
+    <span class="pl-s1">honor</span><span class="pl-c1">-</span><span class="pl-s1">xdg</span><span class="pl-c1">-</span><span class="pl-s1">activation</span><span class="pl-c1">-</span><span class="pl-s1">with</span><span class="pl-c1">-</span><span class="pl-s1">invalid</span><span class="pl-c1">-</span><span class="pl-s1">serial</span>
 }
 
-// Include dms files
-include "dms/colors.kdl"
-include "dms/layout.kdl"
-include "dms/alttab.kdl"
-include "dms/binds.kdl"
-</code></pre>
+<span class="pl-c">// Override to disable super+tab</span>
+<span class="pl-s1">recent</span><span class="pl-c1">-</span><span class="pl-s1">windows</span> {
+    <span class="pl-s1">binds</span> {
+        <span class="pl-s1">Alt</span><span class="pl-c1">+</span><span class="pl-s1">Tab</span>         { <span class="pl-s1">next</span><span class="pl-c1">-</span><span class="pl-s1">window</span> <span class="pl-s1">scope</span><span class="pl-c1">=</span><span class="pl-s">"output"</span>; }
+        <span class="pl-s1">Alt</span><span class="pl-c1">+</span><span class="pl-s1">Shift</span><span class="pl-c1">+</span><span class="pl-s1">Tab</span>   { <span class="pl-s1">previous</span><span class="pl-c1">-</span><span class="pl-s1">window</span> <span class="pl-s1">scope</span><span class="pl-c1">=</span><span class="pl-s">"output"</span>; }
+        <span class="pl-s1">Alt</span><span class="pl-c1">+</span><span class="pl-s1">grave</span>       { <span class="pl-s1">next</span><span class="pl-c1">-</span><span class="pl-s1">window</span> <span class="pl-s1">filter</span><span class="pl-c1">=</span><span class="pl-s">"app-id"</span>; }
+        <span class="pl-s1">Alt</span><span class="pl-c1">+</span><span class="pl-s1">Shift</span><span class="pl-c1">+</span><span class="pl-s1">grave</span> { <span class="pl-s1">previous</span><span class="pl-c1">-</span><span class="pl-s1">window</span> <span class="pl-s1">filter</span><span class="pl-c1">=</span><span class="pl-s">"app-id"</span>; }
+    }
+}
+
+<span class="pl-c">// Include dms files</span>
+<span class="pl-s1">include</span> <span class="pl-s">"dms/colors.kdl"</span>
+<span class="pl-s1">include</span> <span class="pl-s">"dms/layout.kdl"</span>
+<span class="pl-s1">include</span> <span class="pl-s">"dms/alttab.kdl"</span>
+<span class="pl-s1">include</span> <span class="pl-s">"dms/binds.kdl"</span></pre></div>
 <ul>
 <li>配置kitty，配置文件在~/.config/kitty/kitty.conf</li>
 </ul>
-<pre lang="C" class="notranslate"><code class="notranslate"># Font Configuration
-font_size 12.0
+<div class="highlight highlight-source-c"><pre class="notranslate"><span class="pl-k"># Font</span> Configuration
+<span class="pl-s1">font_size</span> <span class="pl-c1">12.0</span>
 
-# Window Configuration
-window_padding_width 12
-background_opacity 1.0
-background_blur 32
-hide_window_decorations yes
+<span class="pl-k"># Window</span> Configuration
+<span class="pl-smi">window_padding_width</span> <span class="pl-c1">12</span>
+<span class="pl-s1">background_opacity</span> <span class="pl-c1">1.0</span>
+<span class="pl-s1">background_blur</span> <span class="pl-c1">32</span>
+<span class="pl-s1">hide_window_decorations</span> <span class="pl-s1">yes</span>
 
-# Cursor Configuration
-cursor_shape block
-cursor_blink_interval 1
+<span class="pl-k"># Cursor</span> <span class="pl-s1">Configuration</span>
+<span class="pl-s1">cursor_shape</span> <span class="pl-s1">block</span>
+<span class="pl-s1">cursor_blink_interval</span> <span class="pl-c1">1</span>
 
-# Scrollback
-scrollback_lines 3000
+<span class="pl-k"># Scrollback</span>
+<span class="pl-s1">scrollback_lines</span> <span class="pl-c1">3000</span>
 
-# Terminal features
-copy_on_select yes
-strip_trailing_spaces smart
+<span class="pl-k"># Terminal</span> <span class="pl-s1">features</span>
+<span class="pl-s1">copy_on_select</span> <span class="pl-s1">yes</span>
+<span class="pl-s1">strip_trailing_spaces</span> <span class="pl-s1">smart</span>
 
-# Key bindings for common actions
-map ctrl+shift+n new_window
-map ctrl+t new_tab
-map ctrl+plus change_font_size all +1.0
-map ctrl+minus change_font_size all -1.0
-map ctrl+0 change_font_size all 0
+<span class="pl-k"># Key</span> bindings for common actions
+<span class="pl-smi">map</span> <span class="pl-s1">ctrl</span><span class="pl-c1">+</span><span class="pl-s1">shift</span><span class="pl-c1">+</span><span class="pl-s1">n</span> <span class="pl-s1">new_window</span>
+<span class="pl-s1">map</span> <span class="pl-s1">ctrl</span><span class="pl-c1">+</span><span class="pl-s1">t</span> <span class="pl-s1">new_tab</span>
+<span class="pl-s1">map</span> <span class="pl-s1">ctrl</span><span class="pl-c1">+</span><span class="pl-s1">plus</span> <span class="pl-s1">change_font_size</span> <span class="pl-s1">all</span> <span class="pl-c1">+</span><span class="pl-c1">1.0</span>
+<span class="pl-s1">map</span> <span class="pl-s1">ctrl</span><span class="pl-c1">+</span><span class="pl-s1">minus</span> <span class="pl-s1">change_font_size</span> <span class="pl-s1">all</span> <span class="pl-c1">-</span><span class="pl-c1">1.0</span>
+<span class="pl-s1">map</span> <span class="pl-s1">ctrl</span><span class="pl-c1">+</span><span class="pl-c1">0</span> <span class="pl-s1">change_font_size</span> <span class="pl-s1">all</span> <span class="pl-c1">0</span>
 
-# Tab configuration
-tab_bar_style powerline
-tab_bar_align left
+<span class="pl-k"># Tab</span> <span class="pl-s1">configuration</span>
+<span class="pl-s1">tab_bar_style</span> <span class="pl-s1">powerline</span>
+<span class="pl-s1">tab_bar_align</span> <span class="pl-s1">left</span>
 
-# Shell integration
-shell_integration enabled
+<span class="pl-k"># Shell</span> integration
+<span class="pl-smi">shell_integration</span> <span class="pl-s1">enabled</span>
 
-# Dank color generation
-include dank-tabs.conf
-include dank-theme.conf
+<span class="pl-k"># Dank</span> color generation
+<span class="pl-smi">include</span> <span class="pl-s1">dank</span><span class="pl-c1">-</span><span class="pl-s1">tabs</span>.<span class="pl-c1">conf</span>
+<span class="pl-smi">include</span> <span class="pl-s1">dank</span><span class="pl-c1">-</span><span class="pl-s1">theme</span>.<span class="pl-c1">conf</span>
 
-# Fonts
-font_family      JetBrainsMono NFM Regular
-bold_font        JetBrainsMono NFM Bold
-italic_font      JetBrainsMono NFM Italic
-bold_italic_font JetBrainsMono NFM Bold Italic
+<span class="pl-k"># Fonts</span>
+<span class="pl-smi">font_family</span>      <span class="pl-s1">JetBrainsMono</span> <span class="pl-smi">NFM</span> <span class="pl-s1">Regular</span>
+<span class="pl-smi">bold_font</span>        <span class="pl-s1">JetBrainsMono</span> <span class="pl-smi">NFM</span> <span class="pl-s1">Bold</span>
+<span class="pl-smi">italic_font</span>      <span class="pl-s1">JetBrainsMono</span> <span class="pl-smi">NFM</span> <span class="pl-s1">Italic</span>
+<span class="pl-smi">bold_italic_font</span> <span class="pl-s1">JetBrainsMono</span> <span class="pl-smi">NFM</span> <span class="pl-s1">Bold</span> <span class="pl-s1">Italic</span>
 
-# Force to use Symbols Nerd Font for Nerd Font symbols
-symbol_map             U+23FB-U+23FE,U+2665,U+26A1,U+2B58,U+E000-U+E00A,U+E0A0-U+E0A3,U+E0B0-U+E0D4,U+E200-U+E2A9,U+E300-U+E3E3,U+E5FA-U+E6AA,U+E700-U+E7C5,U+EA60-U+EBEB,U+F000-U+F2E0,U+F300-U+F32F,U+F400-U+F4A9,U+F500-U+F8FF,U+F0001-U+F1AF0 Symbols Nerd Font Mono
+<span class="pl-k"># Force</span> to use Symbols Nerd Font for Nerd Font symbols
+<span class="pl-smi">symbol_map</span>             <span class="pl-c1">U</span><span class="pl-c1">+23FB</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">23F</span><span class="pl-c1">E</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">2665</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">26</span><span class="pl-c1">A1</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">2B</span><span class="pl-c1">58</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E000</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E00A</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E0A0</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E0A3</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E0B0</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E0D4</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E200</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E2A9</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E300</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E3E3</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E5FA</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E6AA</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E700</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">E7C5</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">EA60</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">EBEB</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F000</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F2E0</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F300</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F32F</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F400</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F4A9</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F500</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F8FF</span>,<span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F0001</span><span class="pl-c1">-</span><span class="pl-c1">U</span><span class="pl-c1">+</span><span class="pl-c1">F1AF0</span> <span class="pl-s1">Symbols</span> <span class="pl-s1">Nerd</span> <span class="pl-s1">Font</span> <span class="pl-s1">Mono</span>
 
-# Cursor
-cursor_trail 3
-</code></pre>
+<span class="pl-k"># Cursor</span>
+<span class="pl-s1">cursor_trail</span> <span class="pl-c1">3</span></pre></div>
 <h2>推荐一些应用</h2>
 <ul>
 <li><a href="https://lxmusic.toside.cn/download" rel="nofollow">lxmusic</a></li>
@@ -469,7 +476,7 @@ if(""!=""){
 </script></div>
 </body>
 <script>
-var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z'};
+var IconList={'sun': 'M8 10.5a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM8 12a4 4 0 100-8 4 4 0 000 8zM8 0a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0V.75A.75.75 0 018 0zm0 13a.75.75 0 01.75.75v1.5a.75.75 0 01-1.5 0v-1.5A.75.75 0 018 13zM2.343 2.343a.75.75 0 011.061 0l1.06 1.061a.75.75 0 01-1.06 1.06l-1.06-1.06a.75.75 0 010-1.06zm9.193 9.193a.75.75 0 011.06 0l1.061 1.06a.75.75 0 01-1.06 1.061l-1.061-1.06a.75.75 0 010-1.061zM16 8a.75.75 0 01-.75.75h-1.5a.75.75 0 010-1.5h1.5A.75.75 0 0116 8zM3 8a.75.75 0 01-.75.75H.75a.75.75 0 010-1.5h1.5A.75.75 0 013 8zm10.657-5.657a.75.75 0 010 1.061l-1.061 1.06a.75.75 0 11-1.06-1.06l1.06-1.06a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.06 1.061a.75.75 0 11-1.061-1.06l1.06-1.061a.75.75 0 011.061 0z', 'moon': 'M9.598 1.591a.75.75 0 01.785-.175 7 7 0 11-8.967 8.967.75.75 0 01.961-.96 5.5 5.5 0 007.046-7.046.75.75 0 01.175-.786zm1.616 1.945a7 7 0 01-7.678 7.678 5.5 5.5 0 107.678-7.678z', 'sync': 'M1.705 8.005a.75.75 0 0 1 .834.656 5.5 5.5 0 0 0 9.592 2.97l-1.204-1.204a.25.25 0 0 1 .177-.427h3.646a.25.25 0 0 1 .25.25v3.646a.25.25 0 0 1-.427.177l-1.38-1.38A7.002 7.002 0 0 1 1.05 8.84a.75.75 0 0 1 .656-.834ZM8 2.5a5.487 5.487 0 0 0-4.131 1.869l1.204 1.204A.25.25 0 0 1 4.896 6H1.25A.25.25 0 0 1 1 5.75V2.104a.25.25 0 0 1 .427-.177l1.38 1.38A7.002 7.002 0 0 1 14.95 7.16a.75.75 0 0 1-1.49.178A5.5 5.5 0 0 0 8 2.5Z', 'home': 'M6.906.664a1.749 1.749 0 0 1 2.187 0l5.25 4.2c.415.332.657.835.657 1.367v7.019A1.75 1.75 0 0 1 13.25 15h-3.5a.75.75 0 0 1-.75-.75V9H7v5.25a.75.75 0 0 1-.75.75h-3.5A1.75 1.75 0 0 1 1 13.25V6.23c0-.531.242-1.034.657-1.366l5.25-4.2Zm1.25 1.171a.25.25 0 0 0-.312 0l-5.25 4.2a.25.25 0 0 0-.094.196v7.019c0 .138.112.25.25.25H5.5V8.25a.75.75 0 0 1 .75-.75h3.5a.75.75 0 0 1 .75.75v5.25h2.75a.25.25 0 0 0 .25-.25V6.23a.25.25 0 0 0-.094-.195Z', 'github': 'M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z', 'copy': 'M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z', 'check': 'M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z'};
 var utterancesLoad=0;
 
 let themeSettings={
@@ -542,7 +549,70 @@ function iFrameLoading(){
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const createClipboardHTML = (codeContent, additionalClasses = '') => `
+        <pre class="notranslate"><code class="notranslate">${codeContent}</code></pre>
+        <div class="clipboard-container position-absolute right-0 top-0 ${additionalClasses}">
+            <clipboard-copy class="ClipboardButton btn m-2 p-0" role="button" style="display: inherit;">
+                <svg height="16" width="16" class="octicon octicon-copy m-2"><path d="${IconList["copy"]}"></path></svg>
+                <svg height="16" width="16" class="octicon octicon-check color-fg-success m-2 d-none"><path d="${IconList["check"]}"></path></svg>
+            </clipboard-copy>
+            <div class="copy-feedback">Copied!</div>
+        </div>
+    `;
 
+    const handleCodeElements = (selector = '') => {
+        document.querySelectorAll(selector).forEach(codeElement => {
+            const codeContent = codeElement.innerHTML;
+            const newStructure = document.createElement('div');
+            newStructure.className = 'snippet-clipboard-content position-relative overflow-auto';
+            newStructure.innerHTML = createClipboardHTML(codeContent);
+
+            const parentElement = codeElement.parentElement;
+            if (selector.includes('highlight')) {
+                parentElement.insertBefore(newStructure, codeElement.nextSibling);
+                parentElement.removeChild(codeElement);
+            } else {
+                parentElement.parentElement.replaceChild(newStructure, parentElement);
+            }
+        });
+    };
+
+    handleCodeElements('pre.notranslate > code.notranslate');
+    handleCodeElements('div.highlight > pre.notranslate');
+
+    let currentFeedback = null;
+    document.querySelectorAll('clipboard-copy').forEach(copyButton => {
+        copyButton.addEventListener('click', () => {
+            const codeContent = copyButton.closest('.snippet-clipboard-content').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = codeContent;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+
+            const copyIcon = copyButton.querySelector('.octicon-copy');
+            const checkIcon = copyButton.querySelector('.octicon-check');
+            const copyFeedback = copyButton.nextElementSibling;
+
+            if (currentFeedback && currentFeedback !== copyFeedback) {currentFeedback.style.display = 'none';}
+            currentFeedback = copyFeedback;
+
+            copyIcon.classList.add('d-none');
+            checkIcon.classList.remove('d-none');
+            copyFeedback.style.display = 'block';
+            copyButton.style.borderColor = 'var(--color-success-fg)';
+
+            setTimeout(() => {
+                copyIcon.classList.remove('d-none');
+                checkIcon.classList.add('d-none');
+                copyFeedback.style.display = 'none';
+                copyButton.style.borderColor = '';
+            }, 2000);
+        });
+    });
+});
 
 </script>
 
