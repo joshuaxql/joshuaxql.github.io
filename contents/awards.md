@@ -1,2 +1,2 @@
 
-- First Prize in the Mathematics Competition of Chinese College Students
+- Second Prize in the Mathematics Competition of Chinese College Students
