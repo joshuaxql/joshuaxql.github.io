@@ -296,7 +296,9 @@ function loadBlogPost(slug) {
         .then(response => response.text())
         .then(markdown => {
             const content = markdown.replace(/^---[\s\S]*?---\n/, '');
-            const html = marked.parse(content);
+            let html = marked.parse(content);
+            // Fix relative image paths: ./image.png -> contents/blog/slug/image.png
+            html = html.replace(/src="\.\//g, `src="${blog_dir}${slug}/`);
             blogPostContainer.innerHTML = `
                 <div class="blog-post">
                     <div class="blog-post-header mb-4">
