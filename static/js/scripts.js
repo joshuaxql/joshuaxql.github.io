@@ -222,14 +222,13 @@ function loadBlogPost(slug) {
     const blogPostContainer = document.getElementById('blog-post');
 
     currentBlogPost = slug;
-    const encodedSlug = encodeURIComponent(slug);
 
     blogListContainer.style.display = 'none';
     blogPostContainer.style.display = 'block';
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
-    fetch(blog_dir + encodedSlug + '/index.md')
+    fetch(blog_dir + slug + '/index.md')
         .then(response => {
             if (!response.ok) throw new Error('Article not found');
             return response.text();
@@ -238,7 +237,7 @@ function loadBlogPost(slug) {
             const content = markdown.replace(/^---[\s\S]*?---\n/, '');
             let html = marked.parse(content);
             // Fix relative image paths: ./image.png -> contents/blog/slug/image.png
-            html = html.replace(/src="\.\//g, `src="${blog_dir}${encodedSlug}/`);
+            html = html.replace(/src="\.\//g, `src="${blog_dir}${slug}/`);
             blogPostContainer.innerHTML = `
                 <div class="blog-post">
                     <div class="blog-post-header mb-4">
