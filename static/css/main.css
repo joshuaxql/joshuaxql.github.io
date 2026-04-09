@@ -109,4 +109,40 @@ section .main-body{
     }
 }
 
+.blog-entry-card {
+    position: absolute;
+    top: 8rem;
+    right: 2rem;
+    z-index: 1000;
+}
 
+.blog-entry-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: var(--h-title-color);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.blog-entry-link:hover {
+    background: #2a3aa8;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.blog-entry-link i {
+    font-size: 1.2rem;
+}
+
+@media screen and (max-width: 767px) {
+    .blog-entry-card {
+        top: auto;
+        bottom: 1rem;
+        right: 1rem;
+    }
+}

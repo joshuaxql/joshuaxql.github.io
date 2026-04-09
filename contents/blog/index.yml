@@ -1,0 +1,11 @@
+- slug: "2024-03-15-first-post"
+  title: "我的第一篇博客"
+  date: "2024-03-15"
+  summary: "这是我的第一篇博客，介绍如何使用这个学术主页的博客功能。"
+  tags: ["AI", "Getting Started"]
+
+- slug: "2024-04-01-mathjax-example"
+  title: "MathJax 数学公式示例"
+  date: "2024-04-01"
+  summary: "展示如何在博客文章中使用 MathJax 渲染美观的数学公式。"
+  tags: ["MathJax", "Tutorial"]
