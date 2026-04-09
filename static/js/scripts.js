@@ -89,33 +89,10 @@ window.addEventListener('DOMContentLoaded', event => {
 // Blog functions
 async function loadBlogList() {
     try {
-        // Try to auto-detect blog posts via GitHub API
-        const repo = 'joshuaxql/joshuaxql.github.io';
-        const apiUrl = `https://api.github.com/repos/${repo}/contents/${blog_dir}`;
-
-        const response = await fetch(apiUrl);
-        if (!response.ok) throw new Error('Failed to fetch blog directory');
-
-        const files = await response.json();
-        const posts = [];
-
-        for (const file of files) {
-            if (file.type === 'dir') {
-                // Fetch the index.md from each folder
-                const mdResponse = await fetch(`https://raw.githubusercontent.com/${repo}/main/${blog_dir}${file.name}/index.md`);
-                if (mdResponse.ok) {
-                    const mdText = await mdResponse.text();
-                    const meta = parseFrontMatter(mdText);
-                    posts.push({
-                        slug: file.name,  // Use folder name as slug
-                        title: meta.title || file.name,
-                        date: meta.date || '',
-                        summary: meta.summary || '',
-                        tags: meta.tags || []
-                    });
-                }
-            }
-        }
+        const response = await fetch(blog_dir + blog_index_file);
+        if (!response.ok) throw new Error('index.yml not found');
+        const text = await response.text();
+        const posts = jsyaml.load(text);
 
         // Sort by date descending
         posts.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -124,19 +101,7 @@ async function loadBlogList() {
         renderTagFilter(posts);
         renderBlogList(posts);
     } catch (error) {
-        console.log('Auto-detect failed, trying index.yml:', error);
-        // Fallback to index.yml
-        try {
-            const response = await fetch(blog_dir + blog_index_file);
-            if (!response.ok) throw new Error('index.yml not found');
-            const text = await response.text();
-            const posts = jsyaml.load(text);
-            allBlogPosts = posts;
-            renderTagFilter(posts);
-            renderBlogList(posts);
-        } catch (e) {
-            console.error('Failed to load blog posts:', e);
-        }
+        console.error('Failed to load blog posts:', error);
     }
 }
 
@@ -286,13 +251,14 @@ function loadBlogPost(slug) {
     const blogPostContainer = document.getElementById('blog-post');
 
     currentBlogPost = slug;
+    const encodedSlug = encodeURIComponent(slug);
 
     blogListContainer.style.display = 'none';
     blogPostContainer.style.display = 'block';
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
-    fetch(blog_dir + slug + '/index.md')
+    fetch(blog_dir + encodedSlug + '/index.md')
         .then(response => response.text())
         .then(markdown => {
             const content = markdown.replace(/^---[\s\S]*?---\n/, '');
