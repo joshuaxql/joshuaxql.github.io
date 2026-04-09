@@ -89,10 +89,33 @@ window.addEventListener('DOMContentLoaded', event => {
 // Blog functions
 async function loadBlogList() {
     try {
-        // Load posts from JSON file
-        const response = await fetch(blog_dir + 'posts.json');
-        if (!response.ok) throw new Error('posts.json not found');
-        const posts = await response.json();
+        // Try to auto-detect blog posts via GitHub API
+        const repo = 'joshuaxql/joshuaxql.github.io';
+        const apiUrl = `https://api.github.com/repos/${repo}/contents/${blog_dir}`;
+
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Failed to fetch blog directory');
+
+        const files = await response.json();
+        const posts = [];
+
+        for (const file of files) {
+            if (file.type === 'dir') {
+                // Fetch the index.md from each folder
+                const mdResponse = await fetch(`https://raw.githubusercontent.com/${repo}/main/${blog_dir}${file.name}/index.md`);
+                if (mdResponse.ok) {
+                    const mdText = await mdResponse.text();
+                    const meta = parseFrontMatter(mdText);
+                    posts.push({
+                        slug: file.name,  // Use folder name as slug
+                        title: meta.title || file.name,
+                        date: meta.date || '',
+                        summary: meta.summary || '',
+                        tags: meta.tags || []
+                    });
+                }
+            }
+        }
 
         // Sort by date descending
         posts.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -101,8 +124,50 @@ async function loadBlogList() {
         renderTagFilter(posts);
         renderBlogList(posts);
     } catch (error) {
-        console.error('Failed to load blog posts:', error);
+        console.log('Auto-detect failed, trying index.yml:', error);
+        // Fallback to index.yml
+        try {
+            const response = await fetch(blog_dir + blog_index_file);
+            if (!response.ok) throw new Error('index.yml not found');
+            const text = await response.text();
+            const posts = jsyaml.load(text);
+            allBlogPosts = posts;
+            renderTagFilter(posts);
+            renderBlogList(posts);
+        } catch (e) {
+            console.error('Failed to load blog posts:', e);
+        }
     }
+}
+
+function parseFrontMatter(text) {
+    const match = text.match(/^---\s*\n([\s\S]*?)\n---/);
+    if (!match) return {};
+
+    const yaml = match[1];
+    const result = {};
+
+    // Parse title
+    const titleMatch = yaml.match(/title:\s*["']?(.*?)["']?\s*$/m);
+    if (titleMatch) result.title = titleMatch[1];
+
+    // Parse date
+    const dateMatch = yaml.match(/date:\s*["']?(.*?)["']?\s*$/m);
+    if (dateMatch) result.date = dateMatch[1];
+
+    // Parse summary
+    const summaryMatch = yaml.match(/summary:\s*["']?(.*?)["']?\s*$/m);
+    if (summaryMatch) result.summary = summaryMatch[1];
+
+    // Parse tags (array)
+    const tagsMatch = yaml.match(/tags:\s*\n((?:\s*-\s*.*\n)*)/);
+    if (tagsMatch) {
+        result.tags = tagsMatch[1].split('\n')
+            .map(line => line.replace(/^\s*-\s*/, '').replace(/["']/g, '').trim())
+            .filter(t => t);
+    }
+
+    return result;
 }
 
 function renderTagFilter(posts) {
@@ -198,11 +263,10 @@ function renderBlogList(posts, isFiltered = false) {
     let html = '<div class="blog-list">';
 
     posts.forEach(post => {
-        const encodedSlug = encodeURIComponent(post.slug);
         html += `
         <article class="blog-item mb-4 p-4 border rounded">
             <h3 class="blog-item-title">
-                <a href="#" onclick="loadBlogPost('${encodedSlug}'); return false;">${post.title}</a>
+                <a href="#" onclick="loadBlogPost('${post.slug}'); return false;">${post.title}</a>
             </h3>
             <div class="blog-item-meta text-muted">
                 <span class="blog-item-date"><i class="bi bi-calendar"></i> ${post.date}</span>
@@ -228,20 +292,11 @@ function loadBlogPost(slug) {
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
-    // Always encode slug for fetch
-    const encodedSlug = encodeURIComponent(slug);
-    const imageBasePath = blog_dir + encodedSlug;
-
-    fetch(imageBasePath + '/index.md')
-        .then(response => {
-            if (!response.ok) throw new Error('Article not found');
-            return response.text();
-        })
+    fetch(blog_dir + slug + '/index.md')
+        .then(response => response.text())
         .then(markdown => {
             const content = markdown.replace(/^---[\s\S]*?---\n/, '');
-            let html = marked.parse(content);
-            // Fix relative image paths: ./image.png -> contents/blog/slug/image.png
-            html = html.replace(/src="\.\//g, `src="${imageBasePath}/`);
+            const html = marked.parse(content);
             blogPostContainer.innerHTML = `
                 <div class="blog-post">
                     <div class="blog-post-header mb-4">
