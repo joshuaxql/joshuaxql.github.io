@@ -4,7 +4,7 @@ const content_dir = 'contents/'
 const config_file = 'config.yml'
 const section_names = ['home', 'publications', 'awards']
 const blog_dir = 'contents/blog/'
-const blog_index_file = 'index.yml'
+const blog_index_file = 'posts.json'
 
 let currentBlogPost = null;
 let allBlogPosts = [];  // Store all posts for filtering
@@ -90,9 +90,8 @@ window.addEventListener('DOMContentLoaded', event => {
 async function loadBlogList() {
     try {
         const response = await fetch(blog_dir + blog_index_file);
-        if (!response.ok) throw new Error('index.yml not found');
-        const text = await response.text();
-        const posts = jsyaml.load(text);
+        if (!response.ok) throw new Error('posts.json not found');
+        const posts = await response.json();
 
         // Sort by date descending
         posts.sort((a, b) => new Date(b.date) - new Date(a.date));
