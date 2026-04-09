@@ -113,6 +113,22 @@
     <!-- Blog List -->
     <section class="bg-gradient-primary-to-secondary-light mt5 md5" id="blog">
         <div class="container px-5">
+            <!-- Search and Filter -->
+            <div class="blog-toolbar mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="blog-search">
+                            <input type="text" id="blog-search-input" class="form-control" placeholder="Search articles...">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="blog-tags" class="blog-tags"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Search Results Info -->
+            <div id="blog-search-info" class="blog-search-info mb-3" style="display:none;"></div>
+            <!-- Blog List -->
             <div id="blog-list"></div>
             <div id="blog-post" style="display:none;"></div>
         </div>

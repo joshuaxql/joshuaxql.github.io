@@ -92,3 +92,80 @@
     margin-bottom: 1rem;
     color: var(--h-title-color);
 }
+
+/* Blog Toolbar (Search & Tags) */
+.blog-toolbar {
+    margin-bottom: 1.5rem;
+}
+
+.blog-search input {
+    border-radius: 2rem;
+    padding: 0.5rem 1rem;
+}
+
+.blog-tags {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-filter {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tag-label {
+    font-weight: 500;
+    margin-right: 0.25rem;
+}
+
+.tag-btn {
+    border: 1px solid var(--h-title-color);
+    background: transparent;
+    color: var(--h-title-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tag-btn:hover {
+    background: var(--h-title-color);
+    color: #fff;
+}
+
+.tag-btn.active {
+    background: var(--h-title-color);
+    color: #fff;
+}
+
+.tag-btn-all {
+    background: var(--h-title-color);
+    color: #fff;
+}
+
+.tag-chip {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    background: #e9ecef;
+    color: #495057;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-right: 0.25rem;
+}
+
+.tag-chip:hover {
+    background: var(--h-title-color);
+    color: #fff;
+}
+
+.blog-search-info {
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+}
