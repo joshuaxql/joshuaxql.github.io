@@ -102,7 +102,8 @@ async function loadBlogList() {
         for (const file of files) {
             if (file.type === 'dir') {
                 // Fetch the index.md from each folder
-                const mdResponse = await fetch(`https://raw.githubusercontent.com/${repo}/main/${blog_dir}${file.name}/index.md`);
+                const encodedFolderName = encodeURIComponent(file.name);
+                const mdResponse = await fetch(`https://raw.githubusercontent.com/${repo}/main/${blog_dir}${encodedFolderName}/index.md`);
                 if (mdResponse.ok) {
                     const mdText = await mdResponse.text();
                     const meta = parseFrontMatter(mdText);
@@ -263,10 +264,11 @@ function renderBlogList(posts, isFiltered = false) {
     let html = '<div class="blog-list">';
 
     posts.forEach(post => {
+        const encodedSlug = encodeURIComponent(post.slug);
         html += `
         <article class="blog-item mb-4 p-4 border rounded">
             <h3 class="blog-item-title">
-                <a href="#" onclick="loadBlogPost('${post.slug}'); return false;">${post.title}</a>
+                <a href="#" onclick="loadBlogPost('${encodedSlug}'); return false;">${post.title}</a>
             </h3>
             <div class="blog-item-meta text-muted">
                 <span class="blog-item-date"><i class="bi bi-calendar"></i> ${post.date}</span>
@@ -286,19 +288,23 @@ function loadBlogPost(slug) {
     const blogPostContainer = document.getElementById('blog-post');
 
     currentBlogPost = slug;
+    const encodedSlug = encodeURIComponent(slug);
 
     blogListContainer.style.display = 'none';
     blogPostContainer.style.display = 'block';
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
-    fetch(blog_dir + slug + '/index.md')
-        .then(response => response.text())
+    fetch(blog_dir + encodedSlug + '/index.md')
+        .then(response => {
+            if (!response.ok) throw new Error('Article not found');
+            return response.text();
+        })
         .then(markdown => {
             const content = markdown.replace(/^---[\s\S]*?---\n/, '');
             let html = marked.parse(content);
             // Fix relative image paths: ./image.png -> contents/blog/slug/image.png
-            html = html.replace(/src="\.\//g, `src="${blog_dir}${slug}/`);
+            html = html.replace(/src="\.\//g, `src="${blog_dir}${encodedSlug}/`);
             blogPostContainer.innerHTML = `
                 <div class="blog-post">
                     <div class="blog-post-header mb-4">
