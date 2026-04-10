@@ -27,51 +27,51 @@ claude
 ![](https://github.com/joshuaxql/pictures/blob/main/imgs/claudecode.png?raw=true)
 
 # 一些常用命令
-```
+```shell
 /init
 ```
 初始化项目，生成CLAUDE.md文件
-```
+```shell
 /resume
 ```
 查询工作目录下的历史对话记录
-```
+```shell
 /memory
 ```
 增加项目或全局记忆（可能也可以叫系统提示词？）
-```
+```shell
 /skills
 ```
 查看skills
-```
+```shell
 /mcp
 ```
 查看mcp
-```
+```shell
 /clear
 ```
 清除上下文context
-```
+```shell
 /compact
 ```
 压缩上下文
-```
+```shell
 /context
 ```
 可视化上下文使用情况
-```
+```shell
 /plan
 ```
 切换到plan模式（这个模式真好用，强烈推荐）
-```
+```shell
 /rename
 ```
 重命名会话名称
-```
+```shell
 /theme
 ```
 更改主题（yysy cc的主题真少）
-```
+```shell
 /exit
 ```
 退出
@@ -79,7 +79,7 @@ claude
 # 配置mcp
 [官网](https://code.claude.com/docs/zh-CN/mcp)有详细的教程可以学习\
 下面我演示一下context7 mcp的安装过程（context7是用来查阅各种项目最新的文档的）
-```
+```shell
 claude mcp add --transport http context7 https://mcp.context7.com/mcp
 ```
 

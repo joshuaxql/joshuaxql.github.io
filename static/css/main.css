@@ -1,8 +1,8 @@
 @import "./styles.css";
 
 
-:root{
-    --h-title-color:#3948d2;
+:root {
+    --h-title-color: #3948d2;
 }
 
 .header {
@@ -41,14 +41,14 @@
     background: rgba(0, 0, 0, 0.5);
 }
 
-section header h2{
+section header h2 {
     font-family: "Kanit", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
     color: var(--h-title-color);
     font-size: 2.3rem;
     line-height: 4rem;
 }
 
-section .main-body{
+section .main-body {
     font-size: 1.3rem;
     font-weight: 200;
     line-height: 2.4rem;
@@ -91,7 +91,7 @@ section .main-body{
 #avatar {
     position: relative;
     height: 0;
-    top:min(-65px,max(-100px,calc(-1*100vw/12)));
+    top: min(-65px, max(-100px, calc(-1*100vw/12)));
     max-width: 55em;
     margin: 0 1.5rem 0 0;
     float: right;
@@ -99,7 +99,7 @@ section .main-body{
 }
 
 #avatar img {
-    height: max(130px,min(200px,calc(100vw/6)));
+    height: max(130px, min(200px, calc(100vw/6)));
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
 }
 
@@ -145,4 +145,73 @@ section .main-body{
         bottom: 1rem;
         right: 1rem;
     }
+}
+
+/* Code block styles for main page sections */
+.main-body pre {
+    background: #2d2d2d;
+    border-radius: 8px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid #404040;
+}
+
+.main-body code {
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.main-body :not(pre)>code {
+    background: #f0f0f0;
+    color: #d63384;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+.main-body pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 0.85rem;
+    line-height: 1.6;
+}
+
+/* Code block wrapper with copy button */
+.code-block-wrapper {
+    position: relative;
+    margin: 1.5rem 0;
+}
+
+.code-block-wrapper pre {
+    margin: 0;
+}
+
+.code-copy-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #ccc;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.code-copy-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+}
+
+.code-copy-btn.copied {
+    background: rgba(40, 167, 69, 0.7);
+    border-color: rgba(40, 167, 69, 0.8);
+    color: #fff;
 }

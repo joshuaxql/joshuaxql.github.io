@@ -9,12 +9,12 @@ tags: ["Tutorial"]
 ![](https://github.com/joshuaxql/pictures/blob/main/imgs/glazewm.png?raw=true)
  
 # 安装
-```
+```shell
 scoop install extras/glazewm
 ```
 
 glazewm默认使用zebar，我认为它颜值不高，所以换成yasb
-```
+```shell
 scoop install extras/yasb
 ```
 

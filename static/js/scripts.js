@@ -11,6 +11,55 @@ let allBlogPosts = [];  // Store all posts for filtering
 let selectedTags = [];  // Selected tags for filtering (multi-select)
 let currentSearchQuery = '';  // Current search query
 
+// Add copy buttons to all <pre> blocks within a container
+function addCopyButtons(container) {
+    const preBlocks = container.querySelectorAll('pre');
+    preBlocks.forEach(pre => {
+        // Skip if already wrapped
+        if (pre.parentElement.classList.contains('code-block-wrapper')) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'code-copy-btn';
+        btn.textContent = '复制';
+        btn.addEventListener('click', async () => {
+            const code = pre.querySelector('code');
+            const text = code ? code.textContent : pre.textContent;
+            try {
+                await navigator.clipboard.writeText(text);
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback for older browsers
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                btn.textContent = '已复制!';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btn.textContent = '复制';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+        });
+
+        // Wrap <pre> in a div so the copy button stays fixed at top-right
+        const wrapper = document.createElement('div');
+        wrapper.className = 'code-block-wrapper';
+        pre.parentNode.insertBefore(wrapper, pre);
+        wrapper.appendChild(btn);
+        wrapper.appendChild(pre);
+    });
+}
+
 
 window.addEventListener('DOMContentLoaded', event => {
 
@@ -54,8 +103,21 @@ window.addEventListener('DOMContentLoaded', event => {
         .catch(error => console.log(error));
 
 
-    // Marked
-    marked.use({ mangle: false, headerIds: false })
+    // Marked - Configure with Prism code highlighting
+    marked.use({
+        mangle: false,
+        headerIds: false,
+        highlight: function (code, lang) {
+            if (lang && Prism.languages[lang]) {
+                try {
+                    return Prism.highlight(code, Prism.languages[lang], lang);
+                } catch (e) {
+                    console.error('Prism highlight error:', e);
+                }
+            }
+            return code;
+        }
+    })
     section_names.forEach((name, idx) => {
         fetch(content_dir + name + '.md')
             .then(response => response.text())
@@ -65,6 +127,12 @@ window.addEventListener('DOMContentLoaded', event => {
             }).then(() => {
                 // MathJax
                 MathJax.typeset();
+                // Prism - highlight any code blocks
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAllUnder(document.getElementById(name + '-md'));
+                }
+                // Add copy buttons to code blocks
+                addCopyButtons(document.getElementById(name + '-md'));
             })
             .catch(error => console.log(error));
     })
@@ -275,6 +343,12 @@ function loadBlogPost(slug) {
         })
         .then(() => {
             MathJax.typesetPromise([blogPostContainer]);
+            // Prism - highlight code blocks in blog post
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAllUnder(blogPostContainer);
+            }
+            // Add copy buttons to code blocks
+            addCopyButtons(blogPostContainer);
         })
         .catch(error => {
             blogPostContainer.innerHTML = '<p>Article not found.</p>';
