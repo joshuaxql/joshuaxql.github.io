@@ -24,7 +24,7 @@ scoop install extras/cc-switch
 claude
 ```
 开始你的vibe coding之旅！
-![](./1.png)
+![](https://github.com/joshuaxql/pictures/blob/main/imgs/claudecode.png?raw=true)
 
 # 一些常用命令
 ```
