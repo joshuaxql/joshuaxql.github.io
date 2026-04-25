@@ -25,5 +25,14 @@
     "tags": [
       "Tutorial"
     ]
+  },
+  {
+    "slug": "wezterm配置",
+    "title": "wezterm配置",
+    "date": "2026-04-10",
+    "summary": "介绍一下wezterm的安装和配置。",
+    "tags": [
+      "Tutorial"
+    ]
   }
 ]
