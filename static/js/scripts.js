@@ -89,7 +89,6 @@ function initThemeToggle() {
             icon.className = 'bi bi-sun-fill';
             localStorage.setItem('theme', 'dark');
         }
-        reloadLive2d();
     });
 }
 
@@ -137,11 +136,8 @@ function initRevealAnimations() {
 let oml2dInstance = null;
 
 function getLive2dModel() {
-    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
     return {
-        path: isDark
-            ? 'https://model.hacxy.cn/cat-black/model.json'
-            : 'https://model.hacxy.cn/cat-white/model.json',
+        path: 'https://model.hacxy.cn/cat-white/model.json',
         scale: 0.15,
         position: [0, 20],
         stageStyle: { height: 350 }

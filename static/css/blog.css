@@ -3,6 +3,27 @@
    Independent from main.css visual styles
    ═══════════════════════════════════════════ */
 
+/* ── Fonts ── */
+@font-face {
+    font-family: 'JetBrainsMono';
+    src: url('../assets/font/JetBrainsMonoNerdFontMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'LXGWWenKaiMono';
+    src: url('../assets/font/LXGWWenKaiMono-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+body {
+    font-family: 'JetBrainsMono', 'LXGWWenKaiMono', monospace !important;
+}
+
 /* ── Glass Foundations ── */
 :root {
     --glass-bg: rgba(255, 255, 255, 0.45);
