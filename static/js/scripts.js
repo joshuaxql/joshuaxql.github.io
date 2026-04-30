@@ -124,50 +124,8 @@ function initBlogPostToc(container) {
     `;
 
     const links = Array.from(tocContainer.querySelectorAll('.blog-toc-link'));
-    const tocList = tocContainer.querySelector('.blog-toc-list');
     const linkMap = new Map(links.map(link => [link.dataset.target, link]));
     const activeThreshold = 140;
-
-    const syncTocPosition = () => {
-        if (window.matchMedia('(max-width: 991px)').matches) {
-            tocContainer.style.left = '';
-            tocContainer.style.right = '';
-            tocContainer.style.width = '';
-            tocContainer.style.top = '';
-            if (tocList) {
-                tocList.style.maxHeight = '';
-            }
-            return;
-        }
-
-        const navbar = document.getElementById('mainNav');
-        const article = container.querySelector('.blog-post');
-        const asideRect = tocAside.getBoundingClientRect();
-        const articleRect = article ? article.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
-        const navbarRect = navbar ? navbar.getBoundingClientRect() : { bottom: 0 };
-        const minTop = Math.max(24, Math.round(navbarRect.bottom + 18));
-        const top = Math.max(minTop, Math.round(articleRect.top));
-        const articleBottom = articleRect.bottom;
-
-        if (articleBottom < minTop + 120) {
-            tocContainer.style.opacity = '0';
-            tocContainer.style.pointerEvents = 'none';
-        } else {
-            tocContainer.style.opacity = '';
-            tocContainer.style.pointerEvents = '';
-        }
-
-        const availableBottom = Math.min(articleBottom - 24, window.innerHeight - 28);
-        const listMaxHeight = Math.max(120, availableBottom - top - 60);
-
-        tocContainer.style.left = `${Math.round(asideRect.left)}px`;
-        tocContainer.style.right = 'auto';
-        tocContainer.style.width = `${Math.round(asideRect.width)}px`;
-        tocContainer.style.top = `${top}px`;
-        if (tocList) {
-            tocList.style.maxHeight = `${listMaxHeight}px`;
-        }
-    };
 
     links.forEach(link => {
         link.addEventListener('click', () => {
@@ -194,20 +152,16 @@ function initBlogPostToc(container) {
     };
 
     const handleScroll = () => {
-        syncTocPosition();
         syncActiveLink();
     };
 
-    syncTocPosition();
     syncActiveLink();
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', syncActiveLink);
-    window.addEventListener('resize', syncTocPosition);
 
     blogTocCleanup = () => {
         window.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', syncActiveLink);
-        window.removeEventListener('resize', syncTocPosition);
     };
 }
 

@@ -75,6 +75,7 @@ body .code-copy-btn {
     --glass-radius: 16px;
     --blog-layout-max-width: 1160px;
     --blog-toc-width: 280px;
+    --blog-toc-top: 6.75rem;
     --blog-text: #1e293b;
     --blog-text-secondary: #475569;
     --blog-text-muted: #64748b;
@@ -463,13 +464,13 @@ body {
 
 .blog-post-aside {
     min-width: 0;
+    position: sticky;
+    top: var(--blog-toc-top);
+    align-self: start;
 }
 
 .blog-post-toc {
-    position: fixed;
-    top: 6.75rem;
-    right: max(1.5rem, calc((100vw - var(--blog-layout-max-width)) / 2));
-    width: var(--blog-toc-width);
+    width: 100%;
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     background: var(--blog-toc-bg);
@@ -478,9 +479,6 @@ body {
     overflow: hidden;
     padding: 1.15rem 1rem 1rem;
     box-shadow: var(--blog-toc-shadow);
-    z-index: 1000;
-    will-change: transform;
-    transition: opacity 0.3s ease;
 }
 
 .blog-toc-title {
@@ -792,6 +790,8 @@ body {
 
     .blog-post-aside {
         order: -1;
+        position: static;
+        top: auto;
     }
 
     .blog-post-toc {
