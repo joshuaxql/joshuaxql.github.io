@@ -456,10 +456,9 @@ body {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--glass-radius);
-    background-clip: padding-box;
     overflow: hidden;
-    isolation: isolate;
     padding: 2rem 2.5rem;
+    will-change: transform;
 }
 
 .blog-post-aside {
@@ -476,9 +475,12 @@ body {
     background: var(--blog-toc-bg);
     border: 1px solid var(--blog-toc-border);
     border-radius: var(--glass-radius);
+    overflow: hidden;
     padding: 1.15rem 1rem 1rem;
     box-shadow: var(--blog-toc-shadow);
     z-index: 1000;
+    will-change: transform;
+    transition: opacity 0.3s ease;
 }
 
 .blog-toc-title {

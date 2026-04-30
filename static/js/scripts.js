@@ -143,11 +143,22 @@ function initBlogPostToc(container) {
         const navbar = document.getElementById('mainNav');
         const article = container.querySelector('.blog-post');
         const asideRect = tocAside.getBoundingClientRect();
-        const articleRect = article ? article.getBoundingClientRect() : { top: 0 };
+        const articleRect = article ? article.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
         const navbarRect = navbar ? navbar.getBoundingClientRect() : { bottom: 0 };
         const minTop = Math.max(24, Math.round(navbarRect.bottom + 18));
         const top = Math.max(minTop, Math.round(articleRect.top));
-        const listMaxHeight = Math.max(180, window.innerHeight - top - 28 - 60);
+        const articleBottom = articleRect.bottom;
+
+        if (articleBottom < minTop + 120) {
+            tocContainer.style.opacity = '0';
+            tocContainer.style.pointerEvents = 'none';
+        } else {
+            tocContainer.style.opacity = '';
+            tocContainer.style.pointerEvents = '';
+        }
+
+        const availableBottom = Math.min(articleBottom - 24, window.innerHeight - 28);
+        const listMaxHeight = Math.max(120, availableBottom - top - 60);
 
         tocContainer.style.left = `${Math.round(asideRect.left)}px`;
         tocContainer.style.right = 'auto';
