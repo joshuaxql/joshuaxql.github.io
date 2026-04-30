@@ -161,8 +161,12 @@ async function loadBlogList() {
         if (!response.ok) throw new Error('posts.json not found');
         const posts = await response.json();
 
-        // Sort by date descending
-        posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // Sort by date descending, then by title ascending
+        posts.sort((a, b) => {
+            const dateCompare = new Date(b.date) - new Date(a.date);
+            if (dateCompare !== 0) return dateCompare;
+            return (a.title || '').localeCompare(b.title || '', 'zh');
+        });
 
         allBlogPosts = posts;
         renderTagFilter(posts);

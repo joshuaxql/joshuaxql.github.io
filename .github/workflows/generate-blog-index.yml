@@ -1,0 +1,26 @@
+name: Generate Blog Index
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'contents/blog/**'
+      - '!contents/blog/posts.json'
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate posts.json
+        run: python scripts/generate_posts.py
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add contents/blog/posts.json
+          git diff --cached --quiet || (git commit -m "Auto-generate posts.json" && git push)
