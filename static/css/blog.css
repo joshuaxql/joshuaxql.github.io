@@ -81,6 +81,8 @@ body .code-copy-btn {
     --blog-text-muted: #64748b;
     --blog-accent: #6366f1;
     --blog-accent-hover: #4f46e5;
+    --blog-post-bg: rgba(248, 250, 252, 0.74);
+    --blog-post-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
     --blog-toc-bg: rgba(255, 255, 255, 0.56);
     --blog-toc-border: rgba(148, 163, 184, 0.28);
     --blog-toc-shadow: 0 16px 40px rgba(15, 23, 42, 0.14);
@@ -102,6 +104,8 @@ body .code-copy-btn {
     --blog-text-muted: #94a3b8;
     --blog-accent: #a5b4fc;
     --blog-accent-hover: #818cf8;
+    --blog-post-bg: rgba(15, 23, 42, 0.82);
+    --blog-post-shadow: 0 18px 42px rgba(2, 6, 23, 0.26);
     --blog-toc-bg: rgba(15, 23, 42, 0.78);
     --blog-toc-border: rgba(255, 255, 255, 0.08);
     --blog-toc-shadow: 0 16px 40px rgba(2, 6, 23, 0.34);
@@ -452,14 +456,14 @@ body {
 .blog-post {
     min-width: 0;
     width: 100%;
-    backdrop-filter: var(--glass-blur);
-    -webkit-backdrop-filter: var(--glass-blur);
-    background: var(--glass-bg);
+    background: var(--blog-post-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--glass-radius);
+    background-clip: padding-box;
     overflow: hidden;
+    isolation: isolate;
     padding: 2rem 2.5rem;
-    will-change: transform;
+    box-shadow: var(--blog-post-shadow);
 }
 
 .blog-post-aside {
