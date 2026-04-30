@@ -77,6 +77,8 @@ function initThemeToggle() {
     icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
 
     btn.addEventListener('click', () => {
+        btn.classList.add('spin');
+        setTimeout(() => btn.classList.remove('spin'), 500);
         const dark = document.documentElement.getAttribute('data-theme') === 'dark';
         if (dark) {
             document.documentElement.removeAttribute('data-theme');
@@ -87,12 +89,92 @@ function initThemeToggle() {
             icon.className = 'bi bi-sun-fill';
             localStorage.setItem('theme', 'dark');
         }
+        reloadLive2d();
+    });
+}
+
+function initScrollEffects() {
+    const progressBar = document.getElementById('scroll-progress');
+    const navbar = document.getElementById('mainNav');
+    const hero = document.querySelector('.top-section, .blog-top-section');
+
+    window.addEventListener('scroll', () => {
+        const scrollTop = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressBar && docHeight > 0) {
+            progressBar.style.width = (scrollTop / docHeight * 100) + '%';
+        }
+        if (navbar) {
+            navbar.classList.toggle('navbar-compact', scrollTop > 80);
+        }
+        if (hero) {
+            hero.style.setProperty('--parallax-y', (scrollTop * 0.3) + 'px');
+        }
+    }, { passive: true });
+}
+
+function initRevealAnimations() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('section').forEach(section => {
+        section.classList.add('reveal');
+        observer.observe(section);
+    });
+
+    document.querySelectorAll('section header h2').forEach(h2 => {
+        h2.classList.add('reveal-header');
+        observer.observe(h2);
+    });
+}
+
+let oml2dInstance = null;
+
+function getLive2dModel() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+        path: isDark
+            ? 'https://model.hacxy.cn/cat-black/model.json'
+            : 'https://model.hacxy.cn/cat-white/model.json',
+        scale: 0.15,
+        position: [0, 20],
+        stageStyle: { height: 350 }
+    };
+}
+
+function reloadLive2d() {
+    if (!oml2dInstance || typeof OML2D === 'undefined' || !document.getElementById('blog-list')) return;
+    oml2dInstance.destroy();
+    oml2dInstance = OML2D.loadOml2d({
+        dockedPosition: 'right',
+        primaryColor: getComputedStyle(document.documentElement).getPropertyValue('--h-title-color').trim(),
+        mobileDisplay: false,
+        models: [getLive2dModel()]
+    });
+}
+
+function initLive2d() {
+    if (typeof OML2D === 'undefined' || !document.getElementById('blog-list')) return;
+    oml2dInstance = OML2D.loadOml2d({
+        dockedPosition: 'right',
+        primaryColor: getComputedStyle(document.documentElement).getPropertyValue('--h-title-color').trim(),
+        mobileDisplay: false,
+        models: [getLive2dModel()]
     });
 }
 
 window.addEventListener('DOMContentLoaded', event => {
 
     initThemeToggle();
+    initScrollEffects();
+    initLive2d();
+    initRevealAnimations();
 
     // Activate Bootstrap scrollspy on the main nav element
     const mainNav = document.body.querySelector('#mainNav');
@@ -329,9 +411,9 @@ function renderBlogList(posts, isFiltered = false) {
 
     let html = '<div class="blog-list">';
 
-    posts.forEach(post => {
+    posts.forEach((post, idx) => {
         html += `
-        <article class="blog-item mb-4 p-4 border rounded">
+        <article class="blog-item mb-4 p-4 border rounded blog-item-stagger" style="animation-delay:${idx * 0.08}s">
             <h3 class="blog-item-title">
                 <a href="#" onclick="loadBlogPost('${post.slug}'); return false;">${post.title}</a>
             </h3>
@@ -357,6 +439,9 @@ function loadBlogPost(slug) {
 
     blogListContainer.style.display = 'none';
     blogPostContainer.style.display = 'block';
+    blogPostContainer.classList.remove('blog-post-enter');
+    void blogPostContainer.offsetWidth;
+    blogPostContainer.classList.add('blog-post-enter');
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
