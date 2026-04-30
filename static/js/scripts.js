@@ -10,6 +10,9 @@ let currentBlogPost = null;
 let allBlogPosts = [];  // Store all posts for filtering
 let selectedTags = [];  // Selected tags for filtering (multi-select)
 let currentSearchQuery = '';  // Current search query
+const blogTocSelector = '.blog-post-content h1, .blog-post-content h2, .blog-post-content h3';
+const blogTocMinItems = 2;
+let blogTocCleanup = null;
 
 // Add copy buttons to all <pre> blocks within a container
 function addCopyButtons(container) {
@@ -58,6 +61,143 @@ function addCopyButtons(container) {
         wrapper.appendChild(btn);
         wrapper.appendChild(pre);
     });
+}
+
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+function cleanupBlogPostToc() {
+    if (typeof blogTocCleanup === 'function') {
+        blogTocCleanup();
+    }
+    blogTocCleanup = null;
+}
+
+function initBlogPostToc(container) {
+    cleanupBlogPostToc();
+
+    const layout = container.querySelector('.blog-post-layout');
+    const tocContainer = container.querySelector('.blog-post-toc');
+    const tocAside = container.querySelector('.blog-post-aside');
+    if (!layout || !tocContainer || !tocAside) return;
+
+    const headings = Array.from(container.querySelectorAll(blogTocSelector))
+        .map((heading, index) => {
+            const text = heading.textContent.replace(/\s+/g, ' ').trim();
+            if (!text) return null;
+
+            const id = `blog-heading-${index + 1}`;
+            heading.id = id;
+
+            return {
+                id,
+                text,
+                depth: Number(heading.tagName.slice(1)),
+                element: heading
+            };
+        })
+        .filter(Boolean);
+
+    if (headings.length < blogTocMinItems) {
+        layout.classList.add('blog-post-layout--single');
+        const tocAside = tocContainer.closest('.blog-post-aside');
+        if (tocAside) {
+            tocAside.remove();
+        }
+        return;
+    }
+
+    layout.classList.remove('blog-post-layout--single');
+    tocContainer.innerHTML = `
+        <div class="blog-toc-title">目录</div>
+        <div class="blog-toc-list" role="navigation" aria-label="文章目录">
+            ${headings.map(heading => `
+                <button type="button" class="blog-toc-link toc-depth-${heading.depth}" data-target="${heading.id}">
+                    <span class="blog-toc-marker" aria-hidden="true"></span>
+                    <span class="blog-toc-text">${escapeHtml(heading.text)}</span>
+                </button>
+            `).join('')}
+        </div>
+    `;
+
+    const links = Array.from(tocContainer.querySelectorAll('.blog-toc-link'));
+    const tocList = tocContainer.querySelector('.blog-toc-list');
+    const linkMap = new Map(links.map(link => [link.dataset.target, link]));
+    const activeThreshold = 140;
+
+    const syncTocPosition = () => {
+        if (window.matchMedia('(max-width: 991px)').matches) {
+            tocContainer.style.left = '';
+            tocContainer.style.right = '';
+            tocContainer.style.width = '';
+            tocContainer.style.top = '';
+            if (tocList) {
+                tocList.style.maxHeight = '';
+            }
+            return;
+        }
+
+        const navbar = document.getElementById('mainNav');
+        const article = container.querySelector('.blog-post');
+        const asideRect = tocAside.getBoundingClientRect();
+        const articleRect = article ? article.getBoundingClientRect() : { top: 0 };
+        const navbarRect = navbar ? navbar.getBoundingClientRect() : { bottom: 0 };
+        const minTop = Math.max(24, Math.round(navbarRect.bottom + 18));
+        const top = Math.max(minTop, Math.round(articleRect.top));
+        const listMaxHeight = Math.max(180, window.innerHeight - top - 28 - 60);
+
+        tocContainer.style.left = `${Math.round(asideRect.left)}px`;
+        tocContainer.style.right = 'auto';
+        tocContainer.style.width = `${Math.round(asideRect.width)}px`;
+        tocContainer.style.top = `${top}px`;
+        if (tocList) {
+            tocList.style.maxHeight = `${listMaxHeight}px`;
+        }
+    };
+
+    links.forEach(link => {
+        link.addEventListener('click', () => {
+            const target = document.getElementById(link.dataset.target);
+            if (!target) return;
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    });
+
+    const syncActiveLink = () => {
+        let activeId = headings[0].id;
+
+        headings.forEach(heading => {
+            if (heading.element.getBoundingClientRect().top <= activeThreshold) {
+                activeId = heading.id;
+            }
+        });
+
+        linkMap.forEach((link, id) => {
+            const isActive = id === activeId;
+            link.classList.toggle('active', isActive);
+            link.setAttribute('aria-current', isActive ? 'true' : 'false');
+        });
+    };
+
+    const handleScroll = () => {
+        syncTocPosition();
+        syncActiveLink();
+    };
+
+    syncTocPosition();
+    syncActiveLink();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', syncActiveLink);
+    window.addEventListener('resize', syncTocPosition);
+
+    blogTocCleanup = () => {
+        window.removeEventListener('scroll', handleScroll);
+        window.removeEventListener('resize', syncActiveLink);
+        window.removeEventListener('resize', syncTocPosition);
+    };
 }
 
 
@@ -286,7 +426,7 @@ async function loadBlogList() {
 }
 
 function parseFrontMatter(text) {
-    const match = text.match(/^---\s*\n([\s\S]*?)\n---/);
+    const match = text.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
     if (!match) return {};
 
     const yaml = match[1];
@@ -426,12 +566,13 @@ function renderBlogList(posts, isFiltered = false) {
     container.innerHTML = html;
 }
 
-function loadBlogPost(slug) {
+async function loadBlogPost(slug) {
     const blogListContainer = document.getElementById('blog-list');
     const blogPostContainer = document.getElementById('blog-post');
 
     currentBlogPost = slug;
     const encodedSlug = encodeURIComponent(slug);
+    cleanupBlogPostToc();
 
     blogListContainer.style.display = 'none';
     blogPostContainer.style.display = 'block';
@@ -441,40 +582,51 @@ function loadBlogPost(slug) {
 
     document.getElementById('blog').scrollIntoView({ behavior: 'smooth' });
 
-    fetch(blog_dir + encodedSlug + '/index.md')
-        .then(response => response.text())
-        .then(markdown => {
-            const content = markdown.replace(/^---[\s\S]*?---\n/, '');
-            const html = marked.parse(content);
-            blogPostContainer.innerHTML = `
-                <div class="blog-post">
+    try {
+        const response = await fetch(blog_dir + encodedSlug + '/index.md');
+        if (!response.ok) throw new Error('Article not found.');
+
+        const markdown = await response.text();
+        const content = markdown.replace(/^---\s*\r?\n[\s\S]*?\r?\n---\s*\r?\n?/, '');
+        const html = marked.parse(content);
+        blogPostContainer.innerHTML = `
+            <div class="blog-post-layout blog-post-layout--single">
+                <article class="blog-post">
                     <div class="blog-post-header mb-4">
                         <a href="#" onclick="backToBlogList(); return false;" class="blog-back-link">
                             <i class="bi bi-arrow-left"></i> Back to Blog
                         </a>
                     </div>
                     <div class="blog-post-content">${html}</div>
-                </div>
-            `;
-        })
-        .then(() => {
-            MathJax.typesetPromise([blogPostContainer]);
-            // Prism - highlight code blocks in blog post
-            if (typeof Prism !== 'undefined') {
-                Prism.highlightAllUnder(blogPostContainer);
-            }
-            // Add copy buttons to code blocks
-            addCopyButtons(blogPostContainer);
-        })
-        .catch(error => {
-            blogPostContainer.innerHTML = '<p>Article not found.</p>';
-        });
+                </article>
+                <aside class="blog-post-aside" aria-label="文章目录">
+                    <div class="blog-post-toc"></div>
+                </aside>
+            </div>
+        `;
+
+        if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+            await MathJax.typesetPromise([blogPostContainer]);
+        }
+
+        if (typeof Prism !== 'undefined') {
+            Prism.highlightAllUnder(blogPostContainer);
+        }
+
+        addCopyButtons(blogPostContainer);
+        initBlogPostToc(blogPostContainer);
+    } catch (error) {
+        cleanupBlogPostToc();
+        blogPostContainer.innerHTML = '<p>Article not found.</p>';
+        console.error(error);
+    }
 }
 
 function backToBlogList() {
     currentBlogPost = null;
     selectedTags = [];
     currentSearchQuery = '';
+    cleanupBlogPostToc();
     document.getElementById('blog-list').style.display = 'block';
     document.getElementById('blog-post').style.display = 'none';
     document.getElementById('blog-search-input').value = '';
