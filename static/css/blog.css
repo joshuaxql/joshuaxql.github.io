@@ -189,7 +189,7 @@ body {
 }
 
 .header .navbar-brand {
-    color: var(--blog-text) !important;
+    color: var(--blog-accent) !important;
 }
 
 .header .nav-link {
@@ -840,13 +840,13 @@ body {
 }
 
 .blog-footer a {
-    color: var(--blog-accent);
+    color: inherit;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .blog-footer a:hover {
-    color: var(--blog-accent-hover);
+    color: var(--blog-text);
 }
 
 .blog-footer .mx-1 {
