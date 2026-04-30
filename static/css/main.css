@@ -185,6 +185,30 @@ body {
     overflow: hidden;
 }
 
+.about-page {
+    min-height: 100vh;
+    background: #0f172a;
+}
+
+.about-main {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background:
+        radial-gradient(circle at 12% 16%, rgba(var(--accent-rgb), 0.22) 0%, rgba(var(--accent-rgb), 0) 28%),
+        linear-gradient(160deg, rgba(15, 23, 42, 0.16) 0%, rgba(15, 23, 42, 0.74) 100%),
+        url('../assets/img/background.jpg') center center / cover no-repeat;
+    overflow: hidden;
+}
+
+.about-main::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(15, 23, 42, 0.62) 100%);
+}
+
 .home-landing-main::before {
     content: "";
     position: absolute;
@@ -369,6 +393,25 @@ body {
 
 .home-bio-card .main-body img {
     max-width: 100%;
+}
+
+.about-bio-section {
+    position: relative;
+    z-index: 1;
+    flex: 1 0 auto;
+    padding-top: 7rem;
+}
+
+.about-page-header {
+    margin-bottom: 1.75rem;
+}
+
+.about-page-title {
+    margin: 0;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff7f2;
+    text-shadow: 0 10px 28px rgba(15, 23, 42, 0.28);
 }
 
 /* ── Avatar ── */
@@ -677,6 +720,10 @@ footer .text-white-50 a:hover {
     color: #fff;
 }
 
+[data-theme="dark"] .about-page-title {
+    color: #fff7f2;
+}
+
 [data-theme="dark"] .theme-toggle-btn {
     border-color: #4b5563;
     color: #fbbf24;
@@ -797,6 +844,10 @@ footer .text-white-50 a:hover {
         padding-bottom: 2.5rem;
     }
 
+    .about-bio-section {
+        padding-top: 6rem;
+    }
+
     .home-bio-grid {
         grid-template-columns: minmax(0, 1fr);
         gap: 1rem;
@@ -812,6 +863,10 @@ footer .text-white-50 a:hover {
     .home-bio-card {
         padding: 1.25rem 1rem;
         border-radius: 20px;
+    }
+
+    .about-page-title {
+        font-size: 1.55rem;
     }
 }
 
