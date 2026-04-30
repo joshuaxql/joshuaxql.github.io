@@ -14,6 +14,52 @@ const blogTocSelector = '.blog-post-content h1, .blog-post-content h2, .blog-pos
 const blogTocMinItems = 2;
 let blogTocCleanup = null;
 
+function configureMarkdownRenderer() {
+    if (typeof marked === 'undefined') return false;
+
+    marked.use({
+        mangle: false,
+        headerIds: false,
+        highlight: function (code, lang) {
+            if (lang && typeof Prism !== 'undefined' && Prism.languages[lang]) {
+                try {
+                    return Prism.highlight(code, Prism.languages[lang], lang);
+                } catch (e) {
+                    console.error('Prism highlight error:', e);
+                }
+            }
+            return code;
+        }
+    });
+
+    return true;
+}
+
+function initMarkdownSections() {
+    if (!configureMarkdownRenderer()) return;
+
+    section_names.forEach((name) => {
+        const container = document.getElementById(name + '-md');
+        if (!container) return;
+
+        fetch(content_dir + name + '.md')
+            .then(response => response.text())
+            .then(markdown => {
+                const html = marked.parse(markdown);
+                container.innerHTML = html;
+            }).then(() => {
+                if (window.MathJax && typeof MathJax.typeset === 'function') {
+                    MathJax.typeset();
+                }
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightAllUnder(container);
+                }
+                addCopyButtons(container);
+            })
+            .catch(error => console.log(error));
+    });
+}
+
 // Add copy buttons to all <pre> blocks within a container
 function addCopyButtons(container) {
     const preBlocks = container.querySelectorAll('pre');
@@ -306,50 +352,16 @@ window.addEventListener('DOMContentLoaded', event => {
         .then(text => {
             const yml = jsyaml.load(text);
             Object.keys(yml).forEach(key => {
-                try {
-                    document.getElementById(key).innerHTML = yml[key];
-                } catch {
-                    console.log("Unknown id and value: " + key + "," + yml[key].toString())
+                const target = document.getElementById(key);
+                if (target) {
+                    target.innerHTML = yml[key];
                 }
-
-            })
+            });
         })
         .catch(error => console.log(error));
 
 
-    // Marked - Configure with Prism code highlighting
-    marked.use({
-        mangle: false,
-        headerIds: false,
-        highlight: function (code, lang) {
-            if (lang && Prism.languages[lang]) {
-                try {
-                    return Prism.highlight(code, Prism.languages[lang], lang);
-                } catch (e) {
-                    console.error('Prism highlight error:', e);
-                }
-            }
-            return code;
-        }
-    })
-    section_names.forEach((name, idx) => {
-        fetch(content_dir + name + '.md')
-            .then(response => response.text())
-            .then(markdown => {
-                const html = marked.parse(markdown);
-                document.getElementById(name + '-md').innerHTML = html;
-            }).then(() => {
-                // MathJax
-                MathJax.typeset();
-                // Prism - highlight any code blocks
-                if (typeof Prism !== 'undefined') {
-                    Prism.highlightAllUnder(document.getElementById(name + '-md'));
-                }
-                // Add copy buttons to code blocks
-                addCopyButtons(document.getElementById(name + '-md'));
-            })
-            .catch(error => console.log(error));
-    })
+    initMarkdownSections();
 
     // Blog - only load if blog-list element exists
     if (document.getElementById('blog-list')) {

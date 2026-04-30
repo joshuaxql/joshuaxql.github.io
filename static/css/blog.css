@@ -79,8 +79,9 @@ body .code-copy-btn {
     --blog-text: #1e293b;
     --blog-text-secondary: #475569;
     --blog-text-muted: #64748b;
-    --blog-accent: #6366f1;
-    --blog-accent-hover: #4f46e5;
+    --blog-accent-rgb: 247, 142, 98;
+    --blog-accent: #F78E62;
+    --blog-accent-hover: #F26A42;
     --blog-post-bg: rgba(248, 250, 252, 0.74);
     --blog-post-shadow: 0 18px 42px rgba(15, 23, 42, 0.12);
     --blog-toc-bg: rgba(255, 255, 255, 0.56);
@@ -89,10 +90,10 @@ body .code-copy-btn {
     --blog-toc-title-color: #1e293b;
     --blog-toc-link-color: #334155;
     --blog-toc-link-muted: #64748b;
-    --blog-toc-link-hover-bg: rgba(99, 102, 241, 0.1);
-    --blog-toc-link-hover-color: #4338ca;
-    --blog-toc-link-active-bg: rgba(99, 102, 241, 0.18);
-    --blog-toc-link-active-color: #312e81;
+    --blog-toc-link-hover-bg: rgba(var(--blog-accent-rgb), 0.12);
+    --blog-toc-link-hover-color: #D8653C;
+    --blog-toc-link-active-bg: rgba(var(--blog-accent-rgb), 0.2);
+    --blog-toc-link-active-color: #BF5731;
     --blog-transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -102,19 +103,19 @@ body .code-copy-btn {
     --blog-text: #e2e8f0;
     --blog-text-secondary: #cbd5e1;
     --blog-text-muted: #94a3b8;
-    --blog-accent: #a5b4fc;
-    --blog-accent-hover: #818cf8;
+    --blog-accent: #F78E62;
+    --blog-accent-hover: #FFAF89;
     --blog-post-bg: rgba(15, 23, 42, 0.82);
     --blog-post-shadow: 0 18px 42px rgba(2, 6, 23, 0.26);
     --blog-toc-bg: rgba(15, 23, 42, 0.78);
     --blog-toc-border: rgba(255, 255, 255, 0.08);
     --blog-toc-shadow: 0 16px 40px rgba(2, 6, 23, 0.34);
     --blog-toc-title-color: #f8fafc;
-    --blog-toc-link-color: rgba(191, 219, 254, 0.78);
-    --blog-toc-link-muted: rgba(191, 219, 254, 0.58);
-    --blog-toc-link-hover-bg: rgba(96, 165, 250, 0.12);
-    --blog-toc-link-hover-color: #dbeafe;
-    --blog-toc-link-active-bg: rgba(96, 165, 250, 0.16);
+    --blog-toc-link-color: rgba(255, 229, 216, 0.84);
+    --blog-toc-link-muted: rgba(255, 229, 216, 0.62);
+    --blog-toc-link-hover-bg: rgba(var(--blog-accent-rgb), 0.14);
+    --blog-toc-link-hover-color: #FFE5D8;
+    --blog-toc-link-active-bg: rgba(var(--blog-accent-rgb), 0.18);
     --blog-toc-link-active-color: #f8fafc;
 }
 
@@ -208,7 +209,7 @@ body {
 .header .theme-toggle-btn:hover {
     border-color: var(--blog-accent);
     color: var(--blog-accent);
-    background: rgba(99, 102, 241, 0.1);
+    background: rgba(var(--blog-accent-rgb), 0.1);
 }
 
 [data-theme="dark"] .header .theme-toggle-btn {
@@ -261,7 +262,7 @@ body {
 
 .blog-search input:focus {
     border-color: var(--blog-accent);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 0 3px rgba(var(--blog-accent-rgb), 0.15);
     background: rgba(255, 255, 255, 0.6);
     outline: none;
 }
@@ -318,7 +319,7 @@ body {
 .tag-btn:hover {
     border-color: var(--blog-accent);
     color: var(--blog-accent);
-    background: rgba(99, 102, 241, 0.12);
+    background: rgba(var(--blog-accent-rgb), 0.12);
 }
 
 .tag-btn.active {
@@ -346,7 +347,7 @@ body {
 .tag-chip {
     display: inline-block;
     padding: 0.12rem 0.55rem;
-    background: rgba(99, 102, 241, 0.15);
+    background: rgba(var(--blog-accent-rgb), 0.15);
     color: var(--blog-accent);
     border-radius: 2rem;
     font-size: 0.75rem;
@@ -583,7 +584,7 @@ body {
 }
 
 .blog-back-link:hover {
-    background: rgba(99, 102, 241, 0.12);
+    background: rgba(var(--blog-accent-rgb), 0.12);
     color: var(--blog-accent);
     text-decoration: none;
 }
@@ -652,7 +653,7 @@ body {
 .blog-post-content blockquote {
     border-left: 4px solid var(--blog-accent);
     backdrop-filter: blur(12px);
-    background: rgba(99, 102, 241, 0.06);
+    background: rgba(var(--blog-accent-rgb), 0.08);
     padding: 1rem 1.5rem;
     margin: 1.5rem 0;
     border-radius: 0 12px 12px 0;
@@ -718,7 +719,7 @@ body {
 }
 
 .blog-post-content :not(pre)>code {
-    background: rgba(99, 102, 241, 0.12);
+    background: rgba(var(--blog-accent-rgb), 0.12);
     color: var(--blog-accent);
     padding: 0.15em 0.45em;
     border-radius: 6px;
@@ -854,7 +855,7 @@ body {
 
 /* ── Scroll Progress (override for blog) ── */
 .scroll-progress {
-    background: linear-gradient(90deg, var(--blog-accent), #a78bfa) !important;
+    background: linear-gradient(90deg, var(--blog-accent), var(--blog-accent-hover)) !important;
 }
 
 /* ── Animations ── */
