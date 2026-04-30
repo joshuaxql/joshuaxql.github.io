@@ -61,7 +61,38 @@ function addCopyButtons(container) {
 }
 
 
+// Apply saved theme immediately to avoid flash
+(function () {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+})();
+
+function initThemeToggle() {
+    const btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    const icon = btn.querySelector('i');
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-fill';
+
+    btn.addEventListener('click', () => {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (dark) {
+            document.documentElement.removeAttribute('data-theme');
+            icon.className = 'bi bi-moon-fill';
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            icon.className = 'bi bi-sun-fill';
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+}
+
 window.addEventListener('DOMContentLoaded', event => {
+
+    initThemeToggle();
 
     // Activate Bootstrap scrollspy on the main nav element
     const mainNav = document.body.querySelector('#mainNav');
