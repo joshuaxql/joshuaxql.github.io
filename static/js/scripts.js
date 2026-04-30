@@ -5,6 +5,9 @@ const config_file = 'config.yml'
 const section_names = ['home', 'publications', 'awards']
 const blog_dir = 'contents/blog/'
 const blog_index_file = 'posts.json'
+const musicManifestPath = 'static/assets/music/tracks.json';
+const musicPlayerStorageKey = 'site-music-player-state';
+const musicPlayerSessionKey = 'site-music-player-session';
 
 let currentBlogPost = null;
 let allBlogPosts = [];  // Store all posts for filtering
@@ -13,6 +16,379 @@ let currentSearchQuery = '';  // Current search query
 const blogTocSelector = '.blog-post-content h1, .blog-post-content h2, .blog-post-content h3';
 const blogTocMinItems = 2;
 let blogTocCleanup = null;
+
+function formatMusicTime(seconds) {
+    if (!Number.isFinite(seconds) || seconds < 0) return '0:00';
+    const minutes = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return `${minutes}:${secs}`;
+}
+
+function readMusicPlayerState(storage, key) {
+    try {
+        const raw = storage.getItem(key);
+        return raw ? JSON.parse(raw) : null;
+    } catch {
+        return null;
+    }
+}
+
+function loadMusicPlayerState() {
+    const sessionState = readMusicPlayerState(sessionStorage, musicPlayerSessionKey);
+    if (sessionState) {
+        return {
+            ...sessionState,
+            restorePlayback: sessionState.wasPlaying === true
+        };
+    }
+
+    const localState = readMusicPlayerState(localStorage, musicPlayerStorageKey);
+    return {
+        ...(localState || {}),
+        restorePlayback: false
+    };
+}
+
+function persistMusicPlayerState(state) {
+    try {
+        const serialized = JSON.stringify(state);
+        localStorage.setItem(musicPlayerStorageKey, serialized);
+        sessionStorage.setItem(musicPlayerSessionKey, serialized);
+    } catch {
+        // Ignore storage errors.
+    }
+}
+
+async function loadMusicTracks() {
+    try {
+        const response = await fetch(musicManifestPath, { cache: 'no-cache' });
+        if (!response.ok) {
+            throw new Error(`Failed to load music manifest: ${response.status}`);
+        }
+
+        const tracks = await response.json();
+        if (!Array.isArray(tracks)) {
+            return [];
+        }
+
+        return tracks.filter(track =>
+            track &&
+            typeof track.title === 'string' &&
+            typeof track.src === 'string'
+        );
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
+}
+
+async function initMusicPlayer() {
+    const musicTracks = await loadMusicTracks();
+    if (!musicTracks.length || document.querySelector('.music-player')) return;
+
+    const persistedState = loadMusicPlayerState();
+    let trackIndex = Number.isInteger(persistedState.trackIndex) ? persistedState.trackIndex : 0;
+    trackIndex = Math.max(0, Math.min(trackIndex, musicTracks.length - 1));
+    let pendingTime = Number.isFinite(persistedState.currentTime) ? Math.max(0, persistedState.currentTime) : 0;
+    let resumePlayback = persistedState.restorePlayback === true;
+
+    const player = document.createElement('div');
+    player.className = 'music-player';
+    player.innerHTML = `
+        <button type="button" class="music-player-tab" aria-label="显示音乐播放器">
+            <i class="bi bi-music-note-beamed" aria-hidden="true"></i>
+            <span>MUSIC</span>
+        </button>
+        <div class="music-player-shell">
+            <div class="music-player-head">
+                <div class="music-player-badge">
+                    <i class="bi bi-music-note-beamed" aria-hidden="true"></i>
+                    <span>MUSIC</span>
+                </div>
+                <div class="music-player-count">${musicTracks.length} tracks</div>
+            </div>
+            <div class="music-player-meta">
+                <div class="music-player-title"></div>
+                <div class="music-player-artist"></div>
+            </div>
+            <div class="music-player-controls">
+                <button type="button" class="music-player-btn music-player-btn-secondary" data-action="prev" aria-label="上一首">
+                    <i class="bi bi-skip-start-fill" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="music-player-btn music-player-btn-primary" data-action="toggle" aria-label="播放">
+                    <i class="bi bi-play-fill" aria-hidden="true"></i>
+                </button>
+                <button type="button" class="music-player-btn music-player-btn-secondary" data-action="next" aria-label="下一首">
+                    <i class="bi bi-skip-end-fill" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="music-player-progress">
+                <span class="music-player-time music-player-time-current">0:00</span>
+                <input class="music-player-slider" type="range" min="0" max="1000" value="0" step="1" aria-label="播放进度" />
+                <span class="music-player-time music-player-time-duration">0:00</span>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(player);
+
+    const audio = new Audio();
+    audio.preload = 'metadata';
+    audio.crossOrigin = 'anonymous';
+
+    const titleEl = player.querySelector('.music-player-title');
+    const artistEl = player.querySelector('.music-player-artist');
+    const countEl = player.querySelector('.music-player-count');
+    const playButton = player.querySelector('[data-action="toggle"]');
+    const prevButton = player.querySelector('[data-action="prev"]');
+    const nextButton = player.querySelector('[data-action="next"]');
+    const progressInput = player.querySelector('.music-player-slider');
+    const currentTimeEl = player.querySelector('.music-player-time-current');
+    const durationEl = player.querySelector('.music-player-time-duration');
+    const navbarBrand = document.getElementById('page-top-title');
+
+    let audioContext = null;
+    let analyserNode = null;
+    let mediaSourceNode = null;
+    let frequencyData = null;
+    let visualizerFrame = null;
+    let navVisualizerCanvas = null;
+    let navVisualizerContext = null;
+    let navVisualizerWidth = 0;
+    let navVisualizerHeight = 0;
+    const navVisualizerBarCount = 14;
+    let navVisualizerLevels = Array.from({ length: navVisualizerBarCount }, () => 0.18);
+
+    if (navbarBrand && !document.querySelector('.navbar-audio-visualizer')) {
+        const navVisualizer = document.createElement('div');
+        navVisualizer.className = 'navbar-audio-visualizer';
+        navVisualizer.innerHTML = '<canvas class="navbar-audio-visualizer-canvas" aria-hidden="true"></canvas>';
+        navbarBrand.insertAdjacentElement('afterend', navVisualizer);
+        navVisualizerCanvas = navVisualizer.querySelector('.navbar-audio-visualizer-canvas');
+        navVisualizerContext = navVisualizerCanvas.getContext('2d');
+    }
+
+    const syncNavbarVisualizerSize = () => {
+        if (!navVisualizerCanvas || !navVisualizerContext) return;
+        const rect = navVisualizerCanvas.getBoundingClientRect();
+        navVisualizerWidth = Math.max(1, rect.width);
+        navVisualizerHeight = Math.max(1, rect.height);
+        const dpr = window.devicePixelRatio || 1;
+        const pixelWidth = Math.max(1, Math.round(navVisualizerWidth * dpr));
+        const pixelHeight = Math.max(1, Math.round(navVisualizerHeight * dpr));
+
+        if (navVisualizerCanvas.width !== pixelWidth || navVisualizerCanvas.height !== pixelHeight) {
+            navVisualizerCanvas.width = pixelWidth;
+            navVisualizerCanvas.height = pixelHeight;
+            navVisualizerContext.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+    };
+
+    const ensureAudioGraph = async () => {
+        const AudioContextCtor = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextCtor) return;
+
+        if (!audioContext) {
+            audioContext = new AudioContextCtor();
+            analyserNode = audioContext.createAnalyser();
+            analyserNode.fftSize = 128;
+            analyserNode.smoothingTimeConstant = 0.82;
+            mediaSourceNode = audioContext.createMediaElementSource(audio);
+            mediaSourceNode.connect(analyserNode);
+            analyserNode.connect(audioContext.destination);
+            frequencyData = new Uint8Array(analyserNode.frequencyBinCount);
+        }
+
+        if (audioContext.state === 'suspended') {
+            try {
+                await audioContext.resume();
+            } catch {
+                // Ignore resume failures; playback promise will reflect user-gesture restrictions.
+            }
+        }
+    };
+
+    const stopNavbarVisualizer = () => {
+        if (visualizerFrame) {
+            window.cancelAnimationFrame(visualizerFrame);
+            visualizerFrame = null;
+        }
+    };
+
+    const drawNavbarVisualizer = () => {
+        if (!navVisualizerContext || !navVisualizerCanvas) return;
+
+        syncNavbarVisualizerSize();
+        navVisualizerContext.clearRect(0, 0, navVisualizerWidth, navVisualizerHeight);
+
+        const accent = getComputedStyle(document.documentElement).getPropertyValue('--h-title-color').trim() || '#F78E62';
+        const gap = 2;
+        const barWidth = Math.max(2, (navVisualizerWidth - gap * (navVisualizerBarCount - 1)) / navVisualizerBarCount);
+        const maxBarHeight = Math.max(4, navVisualizerHeight - 2);
+        const active = analyserNode && frequencyData && !audio.paused && !audio.ended;
+
+        if (active) {
+            analyserNode.getByteFrequencyData(frequencyData);
+            navVisualizerLevels = Array.from({ length: navVisualizerBarCount }, (_, index) => {
+                const sampleIndex = Math.min(
+                    frequencyData.length - 1,
+                    Math.floor(index / navVisualizerBarCount * frequencyData.length)
+                );
+                return frequencyData[sampleIndex] / 255;
+            });
+        }
+
+        for (let index = 0; index < navVisualizerBarCount; index += 1) {
+            const amplitude = navVisualizerLevels[index] ?? 0.18;
+            const barHeight = Math.max(2, amplitude * maxBarHeight);
+            const x = index * (barWidth + gap);
+            const y = navVisualizerHeight - barHeight;
+
+            navVisualizerContext.fillStyle = accent;
+            navVisualizerContext.globalAlpha = active ? 0.96 : 0.28;
+            navVisualizerContext.fillRect(x, y, barWidth, barHeight);
+        }
+
+        navVisualizerContext.globalAlpha = 1;
+        if (active) {
+            visualizerFrame = window.requestAnimationFrame(drawNavbarVisualizer);
+        } else {
+            visualizerFrame = null;
+        }
+    };
+
+    const startNavbarVisualizer = () => {
+        if (!navVisualizerContext || visualizerFrame) return;
+        drawNavbarVisualizer();
+    };
+
+    const saveState = () => {
+        persistMusicPlayerState({
+            trackIndex,
+            currentTime: audio.currentTime || pendingTime || 0,
+            wasPlaying: (!audio.paused && !audio.ended) || resumePlayback
+        });
+    };
+
+    const updatePlayButton = () => {
+        const isPaused = audio.paused;
+        playButton.innerHTML = isPaused
+            ? '<i class="bi bi-play-fill" aria-hidden="true"></i>'
+            : '<i class="bi bi-pause-fill" aria-hidden="true"></i>';
+        playButton.setAttribute('aria-label', isPaused ? '播放' : '暂停');
+    };
+
+    const updateProgress = () => {
+        const duration = Number.isFinite(audio.duration) ? audio.duration : 0;
+        currentTimeEl.textContent = formatMusicTime(audio.currentTime);
+        durationEl.textContent = formatMusicTime(duration);
+        progressInput.value = duration > 0 ? String(Math.round((audio.currentTime / duration) * 1000)) : '0';
+    };
+
+    const attemptPlay = () => {
+        const playPromise = ensureAudioGraph().then(() => audio.play());
+        if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {
+                updatePlayButton();
+                saveState();
+            });
+        }
+    };
+
+    const setTrack = (nextIndex, options = {}) => {
+        const { resumeTime = 0, autoplay = false } = options;
+        trackIndex = (nextIndex + musicTracks.length) % musicTracks.length;
+        const track = musicTracks[trackIndex];
+        pendingTime = Math.max(0, resumeTime);
+        resumePlayback = autoplay;
+
+        titleEl.textContent = track.title;
+        artistEl.textContent = track.artist;
+        countEl.textContent = `${trackIndex + 1} / ${musicTracks.length}`;
+        currentTimeEl.textContent = '0:00';
+        durationEl.textContent = '0:00';
+        progressInput.value = '0';
+
+        audio.src = encodeURI(track.src);
+        audio.load();
+        updatePlayButton();
+        saveState();
+    };
+
+    playButton.addEventListener('click', () => {
+        if (audio.paused) {
+            resumePlayback = true;
+            attemptPlay();
+        } else {
+            resumePlayback = false;
+            audio.pause();
+        }
+    });
+
+    prevButton.addEventListener('click', () => {
+        const shouldAutoplay = !audio.paused;
+        setTrack(trackIndex - 1, { autoplay: shouldAutoplay });
+    });
+
+    nextButton.addEventListener('click', () => {
+        const shouldAutoplay = !audio.paused;
+        setTrack(trackIndex + 1, { autoplay: shouldAutoplay });
+    });
+
+    progressInput.addEventListener('input', () => {
+        if (!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+        audio.currentTime = (Number(progressInput.value) / 1000) * audio.duration;
+        updateProgress();
+        saveState();
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+        if (pendingTime > 0) {
+            audio.currentTime = Math.min(pendingTime, Math.max(0, (audio.duration || pendingTime) - 0.25));
+            pendingTime = 0;
+        }
+        updateProgress();
+        if (resumePlayback) {
+            attemptPlay();
+        }
+    });
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('play', () => {
+        updatePlayButton();
+        startNavbarVisualizer();
+        saveState();
+    });
+    audio.addEventListener('pause', () => {
+        updatePlayButton();
+        stopNavbarVisualizer();
+        drawNavbarVisualizer();
+        saveState();
+    });
+    audio.addEventListener('ended', () => {
+        setTrack(trackIndex + 1, { autoplay: true });
+    });
+
+    window.addEventListener('beforeunload', saveState);
+    window.addEventListener('pagehide', () => {
+        saveState();
+        stopNavbarVisualizer();
+    });
+    window.addEventListener('resize', () => {
+        syncNavbarVisualizerSize();
+        if (!visualizerFrame) {
+            drawNavbarVisualizer();
+        }
+    });
+
+    setTrack(trackIndex, {
+        resumeTime: pendingTime,
+        autoplay: resumePlayback
+    });
+
+    if (navVisualizerContext) {
+        drawNavbarVisualizer();
+    }
+}
 
 function configureMarkdownRenderer() {
     if (typeof marked === 'undefined') return false;
@@ -320,6 +696,7 @@ window.addEventListener('DOMContentLoaded', event => {
 
     initThemeToggle();
     initScrollEffects();
+    initMusicPlayer();
     initLive2d();
     initRevealAnimations();
 
