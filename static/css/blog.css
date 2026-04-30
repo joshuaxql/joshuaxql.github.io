@@ -21,20 +21,46 @@
 }
 
 body,
-body h1, body h2, body h3, body h4, body h5, body h6,
-body p, body a, body span, body li, body td, body th,
-body input, body button, body textarea, body select,
-body .navbar-brand, body .nav-link, body .blog-page-title,
-body .blog-item-title, body .blog-item-summary, body .blog-item-meta,
-body .blog-post-content, body .blog-post-content h1,
-body .blog-post-content h2, body .blog-post-content h3,
-body .blog-toc-title, body .blog-toc-link, body .blog-toc-text,
-body .tag-label, body .tag-btn, body .tag-chip,
-body .blog-back-link, body .blog-search-info {
+body h1,
+body h2,
+body h3,
+body h4,
+body h5,
+body h6,
+body p,
+body a,
+body span,
+body li,
+body td,
+body th,
+body input,
+body button,
+body textarea,
+body select,
+body .navbar-brand,
+body .nav-link,
+body .blog-page-title,
+body .blog-item-title,
+body .blog-item-summary,
+body .blog-item-meta,
+body .blog-post-content,
+body .blog-post-content h1,
+body .blog-post-content h2,
+body .blog-post-content h3,
+body .blog-toc-title,
+body .blog-toc-link,
+body .blog-toc-text,
+body .tag-label,
+body .tag-btn,
+body .tag-chip,
+body .blog-back-link,
+body .blog-search-info {
     font-family: 'JetBrainsMono', 'LXGWWenKaiMono', monospace !important;
 }
 
-body code, body pre, body pre code,
+body code,
+body pre,
+body pre code,
 body .blog-post-content code,
 body .blog-post-content pre code,
 body .code-copy-btn {
@@ -105,7 +131,7 @@ body {
     z-index: -2;
     overflow: hidden;
     pointer-events: none;
-    background: url('../assets/img/blog_background.webp') no-repeat center center;
+    background: no-repeat center center;
     background-size: cover;
 }
 
@@ -450,9 +476,6 @@ body {
     background: var(--blog-toc-bg);
     border: 1px solid var(--blog-toc-border);
     border-radius: var(--glass-radius);
-    background-clip: padding-box;
-    overflow: hidden;
-    isolation: isolate;
     padding: 1.15rem 1rem 1rem;
     box-shadow: var(--blog-toc-shadow);
     z-index: 1000;
@@ -834,6 +857,7 @@ body {
         opacity: 0;
         transform: translateY(24px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -848,6 +872,7 @@ body {
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }
@@ -862,6 +887,7 @@ body {
         opacity: 0;
         transform: translateY(16px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
