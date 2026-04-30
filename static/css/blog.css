@@ -88,10 +88,51 @@ body .code-copy-btn {
 }
 
 /* ── Full-page Background ── */
+html {
+    background: #5d708e;
+}
+
 body {
-    background: url('../assets/img/blog_background.webp') no-repeat center center fixed !important;
-    background-size: cover !important;
+    position: relative;
+    isolation: isolate;
+    background: transparent !important;
     min-height: 100vh;
+}
+
+.blog-video-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+    pointer-events: none;
+    background: url('../assets/img/blog_background.webp') no-repeat center center;
+    background-size: cover;
+}
+
+.blog-video-bg-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: saturate(0.95) brightness(0.82);
+}
+
+.blog-video-bg-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, rgba(93, 112, 142, 0.16) 0%, rgba(93, 112, 142, 0.26) 100%),
+        rgba(43, 55, 79, 0.22);
+}
+
+[data-theme="dark"] .blog-video-bg-media {
+    filter: saturate(0.9) brightness(0.58);
+}
+
+[data-theme="dark"] .blog-video-bg-overlay {
+    background:
+        linear-gradient(180deg, rgba(19, 29, 48, 0.26) 0%, rgba(19, 29, 48, 0.42) 100%),
+        rgba(8, 14, 28, 0.28);
 }
 
 /* ── Override main.css section backgrounds ── */
@@ -170,6 +211,9 @@ body {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--glass-radius);
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     padding: 1rem 1.5rem;
     margin-bottom: 1.5rem;
 }
@@ -291,6 +335,9 @@ body {
     -webkit-backdrop-filter: var(--glass-blur);
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     padding: 0.5rem 1rem;
     border-radius: 12px;
     font-size: 0.9rem;
@@ -309,6 +356,9 @@ body {
     border: 1px solid var(--glass-border) !important;
     border-left: 4px solid var(--blog-accent) !important;
     border-radius: var(--glass-radius) !important;
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-left-width 0.3s ease;
     cursor: pointer;
 }
@@ -380,6 +430,9 @@ body {
     background: var(--glass-bg);
     border: 1px solid var(--glass-border);
     border-radius: var(--glass-radius);
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     padding: 2rem 2.5rem;
 }
 
@@ -397,6 +450,9 @@ body {
     background: var(--blog-toc-bg);
     border: 1px solid var(--blog-toc-border);
     border-radius: var(--glass-radius);
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     padding: 1.15rem 1rem 1rem;
     box-shadow: var(--blog-toc-shadow);
     z-index: 1000;
@@ -746,6 +802,9 @@ body {
     -webkit-backdrop-filter: var(--glass-blur);
     background: var(--glass-bg) !important;
     border-top: 1px solid var(--glass-border);
+    background-clip: padding-box;
+    overflow: hidden;
+    isolation: isolate;
     padding: 2rem 0;
     color: var(--blog-text-secondary);
 }
