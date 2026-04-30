@@ -397,7 +397,7 @@ body {
 
 .blog-item:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 0 30px rgba(var(--blog-accent-rgb), 0.08);
     border-left-width: 6px !important;
 }
 
@@ -909,4 +909,50 @@ body {
 #blog.reveal {
     opacity: 1 !important;
     transform: none !important;
+}
+
+/* ── Blog Page Visual Enhancements ── */
+
+/* Title Gradient Text */
+.blog-page-title {
+    background: linear-gradient(135deg, var(--blog-text) 30%, var(--blog-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+[data-theme="dark"] .blog-page-title {
+    background: linear-gradient(135deg, #f1f5f9 30%, var(--blog-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+/* Toolbar Entrance */
+.blog-toolbar {
+    animation: blogCardIn 0.6s ease-out 0.3s both;
+}
+
+/* Article Title Animated Underline */
+.blog-item-title a {
+    background: linear-gradient(var(--blog-accent), var(--blog-accent)) no-repeat right bottom / 0 2px;
+    transition: background-size 0.3s ease, color 0.2s ease;
+    padding-bottom: 2px;
+}
+
+.blog-item-title a:hover {
+    background-size: 100% 2px;
+    background-position-x: left;
+}
+
+/* Post Content Image Hover */
+.blog-post-content img {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-post-content img:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
 }
